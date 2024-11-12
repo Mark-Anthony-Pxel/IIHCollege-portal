@@ -1,0 +1,337 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Community - IIHCollege</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Unique Font -->
+    <style>
+      body {
+        background: #f0f4f8; /* Light background */
+        font-family: "Roboto", sans-serif; /* Unique font */
+      }
+      .hero {
+        background: #b80f3f;
+        color: #ffffff; /* White text */
+        padding: 100px 0;
+        text-align: center;
+        position: relative;
+      }
+      .hero h1 {
+        font-size: 3rem;
+      }
+      .hero p {
+        font-size: 1.5rem;
+      }
+      .community {
+        padding: 50px 0;
+      }
+      .feature {
+        background: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        padding: 20px;
+      }
+      .feature h3 {
+        color: #333;
+      }
+      .footer {
+        background: #343a40; /* Dark background for footer */
+        color: #ffffff; /* White text */
+        padding: 20px 0;
+        text-align: center;
+      }
+      .footer a {
+        color: #ffffff; /* White links */
+      }
+      .footer a:hover {
+        text-decoration: underline; /* Underline on hover */
+      }
+      .logout-button {
+        background-color: #dc3545; /* Bootstrap danger color */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 15px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      .logout-button:hover {
+        background-color: #b61f2e; /* Darker red on hover */
+      }
+      .community {
+        padding: 50px 0;
+      }
+      .feature {
+        margin-bottom: 30px;
+      }
+      .blog {
+        margin-top: 50px;
+      }
+      .posts {
+        margin-bottom: 30px;
+      }
+      .post {
+        border: 1px solid #ddd;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 5px;
+      }
+      .comment-section {
+        margin-top: 30px;
+      }
+
+      .animate-on-scroll {
+        opacity: 0; /* Start hidden */
+        transform: translateY(50px); /* Start slightly below */
+        transition: opacity 0.5s ease, transform 0.5s ease; /* Smooth transition */
+      }
+
+      .animate-on-scroll.visible {
+        opacity: 1; /* Fade in */
+        transform: translateY(0); /* Move into position */
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light mb-1">
+      <a class="navbar-brand" href="{% url 'home' %}">
+        <img
+          width="50px"
+          src="{% static 'website_portal/image/logo2.png'%}"
+          alt="logo"
+        />IIHCollege</a
+      >
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'home' %}"
+              >Home <span class="sr-only">(current)</span></a
+            >
+          </li>
+          {% if not user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'enroll' %}">Enroll Now</a>
+          </li>
+          {% endif %}
+          {% if user.is_superuser %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'grading' %}">Grading</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'lesson' %}">Lesson</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'subject' %}">Subject</a>
+        </li>
+    </li>
+    <div class="nav-link ml-2">|</div>
+    </li>
+          {% endif %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'event' %}">Events</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'contact' %}">Contact</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="{% url 'community' %}">Community</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+          {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+          </li>
+          <li class="nav-item">
+            <button
+              class="btn btn-danger logout-button"
+              id="logout-button"
+              data-toggle="modal"
+              data-target="#logoutModal"
+            >
+              Logout
+            </button>
+          </li>
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">Login</a>
+          </li>
+          {% if request.user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin:index' %}">Admin Panel</a>
+          </li>
+          {% endif %} {% endif %}
+        </ul>
+      </div>
+    </nav>
+
+    <div class="hero shadow">
+      <h1 class="animate-on-scroll">Join Our Community</h1>
+      <p class="animate-on-scroll">
+        Connect with fellow students, join clubs and organizations, and be part
+        of a vibrant community!
+      </p>
+    </div>
+    <div class="community">
+      <div class="container">
+        <div class="blog">
+          <h2>Community Blog</h2>
+          <p>
+            Stay updated with the latest news, events, and insights from our
+            school community. Share your thoughts and engage with fellow
+            students!
+          </p>
+
+          <div class="posts">
+            <h3>Recent Posts</h3>
+
+            <div class="post">
+              <h4>Upcoming Events: Science Fair</h4>
+              <p>
+                Don't miss our annual Science Fair! Showcase your projects and
+                innovations. Sign up now to participate!
+              </p>
+              <p>
+                <strong>Posted by:</strong> Teacher |
+                <strong>Date:</strong> September 5, 2024
+              </p>
+            </div>
+          </div>
+          <!-- Add more posts as needed -->
+
+          <div class="comment-section">
+            <h3>Share Your Thoughts</h3>
+            <form id="comment-form">
+              <div class="form-group">
+                <label for="name">Your Name:</label>
+                <input type="text" class="form-control" id="name" required />
+              </div>
+              <div class="form-group">
+                <label for="comment">Your Comment:</label>
+                <textarea
+                  class="form-control"
+                  id="comment"
+                  rows="4"
+                  required
+                ></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="container">
+        <p class="text-muted">© 2024 IIHCollege. All rights reserved.</p>
+        <p class="text-muted">
+          <a href="{% url 'privacy_policy' %}" class="text-white"
+            >Privacy Policy</a
+          >
+          |
+          <a href="{% url 'terms_of_service' %}" class="text-white"
+            >Terms of Service</a
+          >
+        </p>
+      </div>
+    </footer>
+
+    <!-- Logout Confirmation Modal -->
+    <div
+      class="modal fade"
+      id="logoutModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="logoutModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">Are you sure you want to log out?</div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <form action="{% url 'logout' %}" method="post" id="logout-form">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger">Logout</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="{% static 'website_portal/js/script.js' %}"></script>
+    <script>
+      function initScrollAnimation(selector) {
+        const elements = document.querySelectorAll(selector);
+
+        function handleScroll() {
+          elements.forEach((element) => {
+            const rect = element.getBoundingClientRect();
+            if (rect.top <= window.innerHeight && rect.bottom >= 0) {
+              element.classList.add("visible");
+            } else {
+              element.classList.remove("visible");
+            }
+          });
+        }
+
+        // Initial check in case elements are already in view
+        handleScroll();
+
+        // Add event listener for scroll event
+        window.addEventListener("scroll", handleScroll);
+      }
+
+      // Initialize the scroll animation for elements with the class 'animate-on-scroll'
+      document.addEventListener("DOMContentLoaded", function () {
+        initScrollAnimation(".animate-on-scroll");
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,68 @@
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f0f4f8;
+        margin: 0;
+        padding: 0;
+    }
+    header {
+        color: white;
+        padding: 20px;
+        text-align: center;
+    }
+    main {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 40px;  /* Adjusted padding for better spacing */
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+    h1, h2 {
+        color: #333;
+        margin-bottom: 20px;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+    input[type="text"], input[type="email"], input[type="tel"], select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+    a, button {
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 15px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        text-decoration: none;
+    }
+    a:hover, button:hover {
+        background-color: #0056b3;
+    }
+    .cancel-button {
+        background-color: #ccc;
+        margin-left: 10px;
+    }
+    .cancel-button:hover {
+        background-color: #aaa;
+    }
+    .messages {
+        margin-bottom: 20px;
+        padding: 10px;
+        border:  1px solid #007BFF;
+        background-color: #e7f3ff;
+        color: #31708f;
+        border-radius: 5px;
+    }
+    .error {
+        color: red;  /* Error message styling */
+    }

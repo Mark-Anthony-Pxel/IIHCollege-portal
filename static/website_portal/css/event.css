@@ -1,0 +1,58 @@
+body {
+    background: #f0f4f8; /* Light background */
+    font-family: 'Roboto', sans-serif; /* Unique font */
+}
+.hero {
+    background: #b80f3f;    
+    color: #ffffff; /* White text */
+    padding: 100px 0;
+    text-align: center;
+    position: relative;
+}
+.hero h1 {
+    font-size: 3rem;
+}
+.hero p {
+    font-size: 1.5rem;
+}
+.features {
+    padding: 50px 0;
+}
+.features .feature {
+    margin-bottom: 20px;
+}
+.features .feature i {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #007bff; /* Icon color */
+}
+.no-events {
+    padding: 50px 0;
+    text-align: center;
+    font-size: 1.2rem;
+    color: #222; /* Grey color for the message */
+}
+.footer {
+    background: #343a40; /* Dark background for footer */
+    color: #ffffff; /* White text */
+    padding: 20px 0;
+    text-align: center;
+}
+.footer a {
+    color: #ffffff; /* White links */
+}
+.footer a:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+#logout-button {
+    background-color: #dc3545; /* Bootstrap danger color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+#logout-button:hover {
+    background-color: #c82333; /* Darker red on hover */
+}

@@ -1,0 +1,44 @@
+<!-- templates/logout.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logged Out</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&display=swap">
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f9f9f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>You have successfully logged out.</h1>
+        <p>Redirecting to homepage...</p>
+        <div class="loading">
+            <span>Loading...</span>
+            <div class="spinner"></div>
+        </div>
+    </div>
+    <script>
+        // Redirect to the homepage after a short delay
+        setTimeout(function() {
+            window.location.href = "{% url 'home' %}"; // Change this to your home URL
+        }, 4000);  // 2 seconds delay
+    </script>
+</body>
+</html>

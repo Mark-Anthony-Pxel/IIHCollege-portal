@@ -1,0 +1,180 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .card {
+            width: 600px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(219, 6, 6, 0.2);
+            border-radius: 10px;
+            background-color: white;
+            transition: move 1s ease-in ;
+        }
+        .form-group {
+            position: relative;
+        }
+        .form-control {
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            transition: all 0.2s ease-in-out;
+            margin-top: 20px;
+        }
+        .form-control:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, .25);
+        }
+        .floating-label {
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            transition: 0.2s ease all;
+            color: #999;
+            pointer-events: none;
+        }
+        .form-control:focus + .floating-label,
+        .form-control:not(:placeholder-shown) + .floating-label {
+            top: -15px;
+            left: 5px;
+            font-size: 12px;
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">      
+        <h2 class="text-center">Register a Teacher</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="text" name="username" class="form-control" required placeholder=" " id="username">
+                <label for="username" class="floating-label">Username</label>
+                <span class="text-danger">{{ form.username.errors }}</span>
+            </div>
+            <div class="form-group">
+                <input type="text" name="first_name" class="form-control" required placeholder=" " id="first_name">
+                <label for="first_name" class="floating-label">First Name</label>
+                <span class="text-danger">{{ form.first_name.errors }}</span>
+            </div>
+            <div class="form-group">
+                <input type="text" name="last_name" class="form-control" required placeholder=" " id="last_name">
+                <label for="last_name" class="floating-label">Last Name</label>
+                <span class="text-danger">{{ form.last_name.errors }}</span>
+            </div>
+            <div class="form-group">
+                <input type="email" name="email" class="form-control" required placeholder=" " id="email">
+                <label for="email" class="floating-label">Email</label>
+                <span class="text-danger">{{ form.email.errors }}</span>
+            </div>
+            <div class="form-group">
+                <input type="text" name="subject" class="form-control" required placeholder=" " id="subject">
+                <label for="subject" class="floating-label">Subject</label>
+                <span class="text-danger">{{ form.subject.errors }}</span>
+            </div>
+            <div class="form-group">
+                <label for="strand" hidden>Strand:</label>
+                <select class="form-control" name="teacher_strand" required id="strand">
+                  <option value="">Select Strand</option>
+                  <option value="STEM">STEM</option>
+                  <option value="ABM">ABM</option>
+                  <option value="HUMSS">HUMSS</option>
+                  <option value="GAS">GAS</option>
+                  <option value="TVL">TVL</option>
+                </select>
+                <span class="text-danger">{{ form.teacher_strand.errors }}</span>
+            </div>
+            <div class="form-group">
+                <div id="tvl-details" style="display: none;">
+                    <label for="tvl_specifics">Please provide specific strand for TVL:</label>
+                    <select class="form-control" name="tvl_specifics" id="tvl_specifics">
+                        <option value="HE - Cookery">HE - Cookery</option>
+                        <option value="HE - Tourism">HE - Tourism</option>
+                        <option value="ICT">ICT</option>
+                    </select>
+                    <span class="text-danger">{{ form.tvl_specifics.errors }}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <input id="id_password" type="password" name="password" class="form-control" required placeholder=" " id="password">
+                <label for="password" class="floating-label">Password</label>
+                <span class="text-danger">{{ form.password.errors }}</span>
+            </div>
+            <div class="form-group">
+                <input id="id_password_confirm" type="password" name="password_confirmation" class="form-control" required placeholder=" " id="password_confirmation">
+                <label for="password_confirmation" class="floating-label">Confirm Password</label>
+                <span class="text-danger">{{ form.password_confirmation.errors }}</span>
+            </div>
+
+            <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" id="show-passwords" onclick="togglePasswordVisibility()" />
+                <label class="form-check-label" for="show-passwords">Show Passwords</label>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Register</button>
+        </form>
+        <p class="text-center mt-3">See the Teacher list <a href="{% url 'teacher_list' %}">Teacher List</a></p>
+
+        {% if messages %}
+            <div class="alert alert-danger" role="alert">
+                <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <a class="back navbar-brand btn btn-danger m-4" href="{% url 'home' %}">Back</a>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function toggleTVLOption() {
+            const strandSelect = document.querySelector('select[name="teacher_strand"]');
+            const tvlDetails = document.getElementById('tvl-details');
+
+            // Show or hide the TVL details based on the selected option
+            if (strandSelect.value === 'TVL') {
+                tvlDetails.style.display = 'block'; // Show the hidden element
+            } else {
+                tvlDetails.style.display = 'none'; // Hide the hidden element
+            }
+        }
+
+        // Add event listener on page load
+        window.onload = function() {
+            const strandSelect = document.querySelector('select[name="teacher_strand"]');
+            strandSelect.addEventListener('change', toggleTVLOption);
+            toggleTVLOption(); // Initial check on page load
+        };
+
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById("id_password");
+            const confirmPasswordInput = document.getElementById("id_password_confirm");
+            const showPasswordsCheckbox = document.getElementById("show-passwords");
+
+            if (showPasswordsCheckbox.checked) {
+                passwordInput.type = "text";
+                confirmPasswordInput.type = "text";
+            } else {
+                passwordInput.type = "password";
+                confirmPasswordInput.type = "password";
+            }
+        }
+    </script>
+</body>
+</html>

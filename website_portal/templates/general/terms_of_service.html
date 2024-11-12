@@ -1,0 +1,114 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - IIH College</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+        .hero {
+            background: #b80f3f;    
+            color: #ffffff;
+            padding: 100px 0;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 3rem;
+        }
+        .hero p {
+            font-size: 1.5rem;
+        }
+        .footer {
+            background: #343a40;
+            color: #ffffff;
+            padding: 20px 0;
+            text-align: center;
+        }
+        .footer a {
+            color: #ffffff;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light mb-3">
+        <a class="navbar-brand" href="{% url 'home'%}">
+            <img width="50px" src="{% static 'website_portal/image/logo2.png'%}" alt="logo">
+            IIHCollege</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'privacy_policy' %}">Privacy Policy</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'terms_of_service' %}">Terms of Service <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'contact' %}">Contact Us</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <h1>Terms of Service</h1>
+        <p>Welcome to IIH College!</p>
+    </div>
+
+    <div class="container my-5">
+        <h2>Introduction</h2>
+        <p>These terms and conditions outline the rules and regulations for the use of IIH College's website and services.</p>
+
+        <h2>Acceptance of Terms</h2>
+        <p>By accessing this website, you accept these terms and conditions in full. If you do not agree with these terms, you must not use our services.</p>
+
+        <h2>Modifications to Terms</h2>
+        <p>We reserve the right to modify these terms at any time. Any changes will be effective immediately upon posting on this page.</p>
+
+        <h2>User Responsibilities</h2>
+        <ul>
+            <li>You agree to use the services only for lawful purposes.</li>
+            <li>You agree not to engage in any conduct that restricts or inhibits anyone's use or enjoyment of the services.</li>
+            <li>You agree to provide accurate information when creating an account.</li>
+        </ul>
+
+        <h2>Intellectual Property</h2>
+        <p>All content, trademarks, and other intellectual property on this site are owned by or licensed to IIH College.</p>
+
+        <h2>Limitation of Liability</h2>
+        <p>In no event shall IIH College be liable for any indirect, incidental, or consequential damages arising from your use of the services.</p>
+
+        <h2>Governing Law</h2>
+        <p>These terms shall be governed by and construed in accordance with the laws of the jurisdiction in which IIH College operates.</p>
+
+        <h2>Contact Us</h2>
+        <p>If you have any questions about these terms, please contact us at >no email yet<a hidden href ="mailto:">no email yet</a>.</p>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p class="text-muted"> 2024 IIHCollege. All rights reserved.</p>
+            <p class="text-muted">
+                <a href="{% url 'privacy_policy' %}" class="text-white">Privacy Policy</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

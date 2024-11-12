@@ -1,0 +1,86 @@
+body {
+    font-family: 'Roboto', sans-serif; /* Unique font */
+}
+.hero {
+    background: #b80f3f;    
+    color: #ffffff; /* White text */
+    padding: 100px 0;
+    text-align: center;
+    position: relative;
+}
+.hero h1 {
+    font-size: 3rem;
+}
+.hero p {
+    font-size: 1.5rem;
+}
+.features {
+    padding: 50px 0;
+}
+.features .feature {
+    margin-bottom: 20px;
+}
+.features .feature i {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #007bff; /* Icon color */
+}
+.footer {
+    background: #343a40; /* Dark background for footer */
+    color: #ffffff; /* White text */
+    padding: 20px 0;
+    text-align: center;
+}
+.footer a {
+    color: #ffffff; /* White links */
+}
+.footer a:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+.shadow {
+    -webkit-box-shadow: 3px 3px 10px 3px #dddddd;
+    -moz-box-shadow: 3px 3px 10px 3px #dddddd;
+    box-shadow: 3px 3px 10px 3px #dddddd;
+}
+/* Custom styles for logout button */
+#logout-button {
+    background-color: #dc3545; /* Bootstrap danger color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+#logout-button:hover {
+    background-color: #c82333; /* Darker red on hover */
+}
+
+/* logout */
+/* Loading Spinner Styles */
+.spinner {
+    display: none; /* Hidden by default */
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top: 4px solid #007BFF; /* Spinner color */
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+    margin-left: 10px; /* Space between button and spinner */
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Button Styles */
+#logout-button {
+    position: relative; /* Position for spinner */
+}
+
+.testimonials {
+    position: relative;
+    overflow: hidden;
+    height: 200px; /* Adjust height as needed */
+}

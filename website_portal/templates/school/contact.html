@@ -1,0 +1,348 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - IIHCollege</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+    background: #f0f4f8; /* Light background */
+    font-family: 'Roboto', sans-serif; /* Unique font */
+}
+.hero {
+    background: #b80f3f;    
+    color: #ffffff; /* White text */
+    padding: 100px 0;
+    text-align: center;
+    position: relative;
+}
+.hero h1 {
+    font-size: 3rem;
+}
+.hero p {
+    font-size: 1.5rem;
+}
+.contact-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 40px;
+    background: #fdfdfd;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+h2 {
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+.input-group {
+    margin-bottom: 20px;
+    position: relative;
+    text-align: left;
+}
+label {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    color: #555;
+    transition: 0.2s ease all;
+    pointer-events: none;
+}
+input[type="text"],
+input[type="email"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+input[type="text"]:focus,
+input[type="email"]:focus,
+textarea:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+    border-color: #007BFF;
+    outline: none;
+}
+input:focus + label,
+input:not(:placeholder-shown) + label,
+textarea:focus + label,
+textarea:not(:placeholder-shown) + label {
+    top: -20px;
+    left: 0px;
+    font-size: 12px;
+    color: #007BFF;
+}
+button {
+    background: #007BFF; /* Bootstrap primary color */
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s, transform 0.2s;
+}
+button:hover {
+    background: #0056b3; /* Darker shade for hover effect */
+    transform: translateY(-2px);
+}
+footer {
+    background: #343a40; /* Dark background for footer */
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+}
+footer a {
+    color: #ffffff; /* White links */
+}
+footer a:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+
+.animate-on-scroll {
+            opacity: 0; /* Start hidden */
+            transform: translateY(50px); /* Start slightly below */
+            transition: opacity 0.5s ease, transform 0.5s ease; /* Smooth transition */
+        }
+
+        .animate-on-scroll.visible {
+            opacity: 1; /* Fade in */
+            transform: translateY(0); /* Move into position */
+        }
+
+        .logout-button {
+    background-color: #dc3545; /* Bootstrap danger color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.logout-button:hover {
+    background-color: #b61f2e; /* Darker red on hover */
+}
+
+.body-post {
+            list-style-type: none; /* Remove default list styling */
+            padding: 0;
+        }
+        .post {
+            background: #f9f9f9; /* Light background for messages */
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Shadow for messages */
+            transition: transform 0.2s; /* Smooth transition */
+        }
+        .post:hover {
+            transform: translateY(-2px); /* Lift effect on hover */
+        }
+        .text-success {
+            color: #28a745; /* Green color for approved messages */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light mb-1">
+        <a class="navbar-brand" href="{% url 'home' %}">
+            <img width="50px" src="{% static 'website_portal/image/logo2.png'%}" alt="logo">IIHCollege</a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    {% if not user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'enroll' %}">Enroll Now</a>
+                    </li>
+                    {% endif %}
+                    {% if not user.is_superuser %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'event' %}">Events</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'contact' %}">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'community' %}">Community</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'grading' %}">Grading</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'lesson' %}">Lesson</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'subject' %}">Subject</a>
+                    </li>
+                </li>
+                <div class="nav-link ml-2">|</div>
+                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'event' %}">Events</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'contact' %}">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'community' %}">Community</a>
+                    </li>
+                    {% endif %}
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+                            </li>
+                        </li>
+                        <li class="nav-item">
+                            <button class="btn btn-danger logout-button" id="logout-button" data-toggle="modal" data-target="#logoutModal">Logout</button>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}">Login</a>
+                        </li>
+                        {% if request.user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'admin:index' %}">Admin Panel</a>
+                        </li>
+                        {% endif %}
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+
+    {% if not user.is_superuser %}
+    <div class="hero shadow">
+        <h1 class="animate-on-scroll">Get in Touch with Us</h1>
+        <p  class="animate-on-scroll">Have a question or concern? We're here to help!</p>
+    </div>
+    {% else %}
+    <div class="hero shadow">
+        <h1 class="animate-on-scroll">Students Feedback</h1>
+        <p  class="animate-on-scroll">Question or concern of IIHCollege students</p>
+    </div>
+    {% endif %}
+    {% if not user.is_superuser %}
+    <div class="contact-container animate-on-scroll">
+        <h2>Contact Form</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="input-group">
+                <textarea rows="8" id="message" name="message" required placeholder=""></textarea>
+                <label for="message">Message</label>
+            </div>
+            <button type="submit">Send Message</button>
+        </form>
+    {% else %}
+        <h2 class="mt-5">Submitted Messages</h2>
+        <ul class="body-post m-5">
+            {% for message in messages %}
+            <li class="post p-5">
+                <strong>{{ message.student.last_name|upper }}, {{ message.student.first_name|upper }}</strong> ({{ message.student.email }})<br>
+                <p class="m-2">{{ message.message }}</p><br>
+                {% if not message.approved %}
+                <form method="post" action="{% url 'approve_message' message.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit">Approve</button>
+                </form>
+                {% else %}
+                <span class="text-success">Approved</span>
+                {% endif %}
+                <form method="post" action="{% url 'delete_message' message.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" onclick="return confirm('Are you sure you want to delete this message?');">Delete</button>
+                </form>
+            </li>
+            {% empty %}
+            <li class="post">No messages submitted yet.</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+    
+
+    <footer class="footer">
+        <div class="container">
+            <p class="text-muted"> © 2024 IIHCollege. All rights reserved.</p>
+            <p class="text-muted">
+                <a href="{% url 'privacy_policy' %}" class="text-white">Privacy Policy</a> |
+                <a href="{% url 'terms_of_service' %}" class="text-white">Terms of Service</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Logout Confirmation Modal -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to log out?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <form action="{% url 'logout' %}" method="post" id="logout-form">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="{% static 'website_portal/js/script.js' %}"></script>
+    <script>
+    function initScrollAnimation(selector) {
+    const elements = document.querySelectorAll(selector);
+    
+    function handleScroll() {
+        elements.forEach(element => {
+            const rect = element.getBoundingClientRect();
+            if (rect.top <= window.innerHeight && rect.bottom >= 0) {
+                element.classList.add('visible');
+            } else {
+                element.classList.remove('visible');
+            }
+        });
+    }
+
+    // Initial check in case elements are already in view
+    handleScroll();
+
+    // Add event listener for scroll event
+    window.addEventListener('scroll', handleScroll);
+}
+
+// Initialize the scroll animation for elements with the class 'animate-on-scroll'
+document.addEventListener('DOMContentLoaded', function() {
+    initScrollAnimation('.animate-on-scroll');
+});
+    </script>
+</body>
+</html>

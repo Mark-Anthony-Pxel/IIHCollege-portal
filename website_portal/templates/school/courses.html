@@ -1,0 +1,250 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses - IIHCollege</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"> <!-- Unique Font -->
+    <style>
+        body {
+    background: #f0f4f8; /* Light background */
+    font-family: 'Roboto', sans-serif; /* Unique font */
+}
+.hero {
+    background: #b80f3f;    
+    color: #ffffff; /* White text */
+    padding: 100px 0;
+    text-align: center;
+    position: relative;
+}
+.hero h1 {
+    font-size: 3rem;
+}
+.hero p {
+    font-size: 1.5rem;
+}
+.courses {
+    padding: 50px 0;
+}
+.course {
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    padding: 20px;
+}
+.course h3 {
+    color: #333;
+}
+.footer {
+    background: #343a40; /* Dark background for footer */
+    color: #ffffff; /* White text */
+    padding: 20px 0;
+    text-align: center;
+}
+.footer a {
+    color: #ffffff; /* White links */
+}
+.footer a:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+.logout-button {
+    background-color: #dc3545; /* Bootstrap danger color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.logout-button:hover {
+    background-color: #c82333; /* Darker red on hover */
+}
+
+.animate-on-scroll {
+            opacity: 0; /* Start hidden */
+            transform: translateY(50px); /* Start slightly below */
+            transition: opacity 1s ease, transform 0.5s ease; /* Smooth transition */
+        }
+
+        .animate-on-scroll.visible {
+            opacity: 1; /* Fade in */
+            transform: translateY(0); /* Move into position */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light mb-1">
+        <a class="navbar-brand" href="{% url 'home' %}"><img width="50px" src="{% static 'website_portal/image/logo2.png'%}" alt="">IIHCollege</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">Home</a>
+                </li>
+                {% if not user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'enroll' %}">Enroll Now</a>
+                </li>
+                {% endif %}
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'event' %}">Events</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'contact' %}">Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'courses' %}">Courses <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'community' %}">Community</a>
+                </li>
+                {% endif %}
+                {% if not user.is_authenticated %} 
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'courses' %}">Courses <span class="sr-only">(current)</span></a>
+                </li>
+                {% endif %}
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn btn-danger logout-button" id="logout-button" data-toggle="modal" data-target="#logoutModal">Logout</button>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                    {% if request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'admin:index' %}">Admin Panel</a>
+                    </li>
+                    {% endif %}
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <div class="hero shadow">
+        <h1 class="animate-on-scroll">Explore Our Courses</h1>
+        <p class="animate-on-scroll">Discover the perfect course for your academic goals!</p>
+    </div>
+
+    <div class="courses">
+        <div class="container">
+            <h2>Available Senior High School Strands</h2>
+            <div class="row">
+                <div class="col-md-15 animate-on-scroll">
+                    <div class="course">
+                        <img class="w-100 p-3" src="{% static 'website_portal/image/tvl.png'%}" alt="">
+                        <h3>TVL: Technical-Vocational-Livelihood</h3>
+                        <p>Unlock your potential with hands-on skills in various technical fields. Perfect for those who want to dive into practical careers and gain real-world experience!</p>
+                    </div>
+                </div>
+                <div class="col-md-15 animate-on-scroll">
+                    <div class="course">
+                        <img class="w-100 p-3" src="{% static 'website_portal/image/abm.png'%}" alt="">
+                        <h3>ABM: Accountancy, Business, and Management</h3>
+                        <p>Step into the world of business! This strand equips you with essential knowledge in finance and management, setting you up for success in the corporate arena.</p>
+                    </div>
+                </div>
+                <div class="col-md-15 animate-on-scroll">
+                    <div class="course">
+                        <img class="w-100 p-3" src="{% static 'website_portal/image/stem2.png'%}" alt="">
+                        <h3>STEM: Science, Technology, Engineering, and Mathematics</h3>
+                        <p>Fuel your curiosity and innovation! This strand is designed for future scientists and engineers, focusing on analytical skills and problem-solving techniques.</p>
+                    </div>
+                </div>
+                <div class="col-md-15 animate-on-scroll">
+                    <div class="course">
+                        <img class="w-100 p-3" src="{% static 'website_portal/image/gas.png'%}" alt="">
+                        <h3>GAS: General Academic Strand</h3>
+                        <p>Explore a diverse range of subjects! This flexible strand allows you to tailor your education, preparing you for various college courses and career paths.</p>
+                    </div>
+                </div>
+                <div class="col-md-15 animate-on-scroll">
+                    <div class="course">
+                        <img class="w-100 p-3" src="{% static 'website_portal/image/humss.png'%}" alt="">
+                        <h3>HUMSS: Humanities and Social Sciences</h3>
+                        <p>Delve into the human experience! This strand focuses on understanding society and culture, ideal for those interested in social work, education, and the arts.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer animate-on-scroll">
+        <div class="container">
+            <p class="text-muted"> © 2024 IIHCollege. All rights reserved.</p>
+            <p class="text-muted">
+                <a href="{% url 'privacy_policy' %}" class="text-white">Privacy Policy</a> |
+                <a href="{% url 'terms_of_service' %}" class="text-white">Terms of Service</a>
+            </p>
+        </div>
+    </footer>
+
+        <!-- Logout Confirmation Modal -->
+        <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to log out?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <form action="{% url 'logout' %}" method="post" id="logout-form">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Logout</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+    function initScrollAnimation(selector) {
+    const elements = document.querySelectorAll(selector);
+    
+    function handleScroll() {
+        elements.forEach(element => {
+            const rect = element.getBoundingClientRect();
+            if (rect.top <= window.innerHeight && rect.bottom >= 0) {
+                element.classList.add('visible');
+            } else {
+                element.classList.remove('visible');
+            }
+        });
+    }
+
+    // Initial check in case elements are already in view
+    handleScroll();
+
+    // Add event listener for scroll event
+    window.addEventListener('scroll', handleScroll);
+}
+
+// Initialize the scroll animation for elements with the class 'animate-on-scroll'
+document.addEventListener('DOMContentLoaded', function() {
+    initScrollAnimation('.animate-on-scroll');
+});
+
+    </script>
+</body>
+</html>

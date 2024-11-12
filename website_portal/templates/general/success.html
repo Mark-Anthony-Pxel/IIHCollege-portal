@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enrollment Success</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #4CAF50;
+        }
+        p {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+        a.homeButton {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 10px 15px;
+            background: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        a.homeButton:hover {
+            background: #45a049;
+        }
+        a.contactButton {
+            display: inline-block;
+            color: red;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Enrollment Successful!</h1>
+    <p>Congratulations! You have been successfully enrolled in IIHCollege.</p>
+    <p>Your details have been recorded, and you will receive further information via email.</p>
+    <p>If you have any questions, feel free to 
+    <a href="{% url 'contact' %}" class="contactButton">Contact Us</a></p>
+    
+    <h2>Requirements for New Students & Transferees:</h2>
+    <p>
+        ✅ NSO/PSA/LIVE BIRTH (Original) <br>
+        ✅ Good Moral Certificate (Original) <br>
+        ✅ Report Card Grade 10 (to follow) <br>
+        ✅ ALS Certificate (if ALS PASSER) <br>
+        ✅ ID (Picture Taking agad, kaya ready to pose dapat!)
+    </p>    
+    <a href="{% url 'home' %}" class="homeButton">Return to Home</a>
+</div>
+
+</body>
+</html>

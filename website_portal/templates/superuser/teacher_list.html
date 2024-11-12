@@ -1,0 +1,186 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher List</title>
+    <!-- Bootstrap CSS from CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa; /* Light background */
+        }
+        .card {
+            border: none;
+            border-radius: 15px; /* Rounded corners */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Shadow effect */
+            transition: transform 0.2s; /* Smooth transition */
+        }
+        .card:hover {
+            transform: translateY(-1px); /* Lift effect on hover */
+        }
+        .table th, .table td {
+            vertical-align: middle; /* Center align */
+        }
+        h1, h2 {
+            color: #343a40; /* Darker text color */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light mb-1">
+        <a class="navbar-brand" href="{% url 'home' %}">
+            <img width="50px" src="{% static 'website_portal/image/logo2.png' %}" alt="logo"> IIHCollege
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">Home</a>
+                </li>
+                {% if not user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'enroll' %}">Enroll Now</a>
+                </li>
+                {% endif %}
+                {% if user.is_authenticated %}
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'teacher_list' %}">Teacher List</a>
+                </li>
+                {% endif %}
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn btn-danger logout-button p-2" id="logout-button" data-toggle="modal" data-target="#logoutModal">Logout</button>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="card p-4">
+            <h1 class="text-center">Teacher List</h1>
+            <h2 class="mt-4">Teachers by Strand and Subject</h2>
+            <div class="text-right mb-3">
+                <button class="btn btn-success" data-toggle="modal" data-target="#addSubjectModal">Add Subject</button>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Name</th>
+                            <th>Strand</th>
+                            <th>Subject</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for teacher in teachers %}
+                        <tr>
+                            <td>{{ teacher.user.first_name }} {{ teacher.user.last_name }}</td>
+                            <td>{{ teacher.teacher_strand }}</td>
+                            <td>
+                                <ul>
+                                    {% for subject in teacher.subjects.all %}
+                                    <li>
+                                        {{ subject.name }}
+                                        <button class="btn btn-warning btn-sm edit-subject" data-id ="{{ subject.id }}" data-name="{{ subject.name }}" data-toggle="modal" data-target="#editSubjectModal">Edit</button>
+                                        <form action="{% url 'remove_subject' %}" method="POST" style="display:inline;">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="id" value="{{ subject.id }}">
+                                            <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                                        </form>
+                                    </li>
+                                    {% empty %}
+                                    <li>No subjects assigned.</li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="3" class="text-center">No teachers found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Subject Modal -->
+    <div class="modal fade" id="editSubjectModal" tabindex="-1" role="dialog" aria-labelledby="editSubjectModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editSubjectModalLabel">Edit Subject</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{% url 'edit_subject' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" id="editSubjectId" name="id">
+                        <div class="form-group">
+                            <label for="editSubjectName">Subject Name</label>
+                            <input type="text" class="form-control" id="editSubjectName" name="name" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update Subject</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Subject Modal -->
+    <div class="modal fade" id="addSubjectModal" tabindex="-1" role="dialog" aria-labelledby="addSubjectModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addSubjectModalLabel">Add Subject</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{% url 'add_subject' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="newSubjectName">Subject Name</label>
+                            <input type="text" class="form-control" id="newSubjectName" name="name" required>
+                        </div>
+                        <button type="submit" class="btn btn-success">Add Subject</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Handle edit button click
+            $('.edit-subject').on('click', function() {
+                const subjectId = $(this).data('id');
+                const subjectName = $(this).data('name');
+                $('#editSubjectId').val(subjectId);
+                $('#editSubjectName').val(subjectName);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,180 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <!-- Bootstrap CSS from CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa; /* Light background */
+        }
+        .card {
+            border: none;
+            border-radius: 15px; /* Rounded corners */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Shadow effect */
+            transition: transform 0.2s; /* Smooth transition */
+        }
+        .card:hover {
+            transform: translateY(-1px); /* Lift effect on hover */
+        }
+        .table th, .table td {
+            vertical-align: middle; /* Center align */
+        }
+        h1, h2 {
+            color: #343a40; /* Darker text color */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light mb-1">
+        <a class="navbar-brand" href="{% url 'home' %}">
+            <img width="50px" src="{% static 'website_portal/image/logo2.png'%}" alt="logo">IIHCollege</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+                {% if not user.is_authenticated %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'enroll' %}">Enroll Now</a></li>
+                {% endif %}
+                {% if user.is_superuser %}
+                <li class="nav-item active"><a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a></li>
+                {% endif %}
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                {% if user.is_authenticated %}
+                    <li class="nav-item"><button class="btn btn-danger logout-button p-2" id="logout-button" data-toggle="modal" data-target="#logoutModal">Logout</button></li>
+                {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="card p-4">
+            <h1 class="text-center">Dashboard</h1>
+            <h2>Your Students</h2>
+            <div class="text-right mb-3">
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#studentModal" onclick="clearForm()">Add Student</button>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Name</th>
+                            <th>Class</th>
+                            <th>Section</th>
+                            <th>Time</th>
+                            <th>Strand</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in students %}
+                        <tr>
+                            <td>{{ student.first_name }} {{ student.middle_name }} {{ student.last_name }}</td>
+                            <td>{{ student.class_name }}</td>
+                            <td>{{ student.section }}</td>
+                            <td>{{ student.time }}</td>
+                            <td>{{ student.strand }}</td>
+                            <td>
+                                <button class="btn btn-warning btn-sm" onclick="editStudent('{{ student_id }}', '{{ student.class_name }}', '{{ student.section }}', '{{ student.time }}')">Edit</button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteStudent('{{ student_id }}')">Delete</button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Student Modal -->
+    <div class="modal fade" id="studentModal" tabindex="-1" role="dialog" aria-labelledby="studentModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="studentModalLabel">Add/Edit Student</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="studentForm">
+                        <input type="hidden" id="studentId" value="">
+                        <div class="form-group">
+                            <label for="class_name">Class</label>
+                            <input type="text" class="form-control" id="class_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="section">Section</label>
+                            <input type="text" class="form-control" id="section" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="time">Time</label>
+                            <input type="text" class="form-control" id="time" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveButton" onclick="saveStudent()">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies from CDN -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function clearForm() {
+            document.getElementById('studentForm').reset();
+            document.getElementById('studentId').value = '';
+            document.getElementById('studentModalLabel').innerText = 'Add Student';
+            document.getElementById('saveButton').innerText = 'Add Student';
+        }
+
+        function editStudent(id, className, section, time) {
+            document.getElementById('studentId').value = id;
+            document.getElementById('class_name').value = className;
+            document.getElementById('section').value = section;
+            document.getElementById('time').value = time;
+            document.getElementById('studentModalLabel').innerText = 'Edit Student';
+            document.getElementById('saveButton').innerText = 'Update Student';
+            $('#studentModal').modal('show');
+        }
+
+        function deleteStudent(id) {
+            if (confirm('Are you sure you want to delete this student?')) {
+                // Implement the delete functionality here
+                // You can use AJAX to send a request to your Django view to delete the student
+            }
+        }
+
+        function saveStudent() {
+            const id = document.getElementById('studentId').value;
+            const className = document.getElementById('class_name').value;
+            const section = document.getElementById('section').value;
+            const time = document.getElementById('time').value;
+
+            if (id) {
+                // Update existing student
+                // Implement AJAX call to update the student in the database
+            } else {
+                // Add new student
+                // Implement AJAX call to add the new student to the database
+            }
+
+            $('#studentModal').modal('hide');
+            // Optionally refresh the student list or update the table dynamically
+        }
+    </script>
+</body>
+</html>
