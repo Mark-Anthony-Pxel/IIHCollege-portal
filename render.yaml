@@ -2,7 +2,7 @@ databases:
   - name: iihcollege
     plan: free
     databaseName: iihcdatabase
-    user: Pxel
+    user: pxel
 
 services:
   - type: web
