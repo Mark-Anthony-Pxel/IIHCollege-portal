@@ -8,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-n&q%g+ju@we4a=v2+(cyl^%gc4m^x+(yg%c1c&_l&+qg1!p921'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'link here',  
@@ -78,14 +78,13 @@ DATABASES = {
     }
 }
 
-# DATABASES = {
-#     'default': dj_database_url.config(
-#         # Replace this value with your local database's connection string.
-#         default='postgresql://website_portal_9uru_user:Z9BTFvOJ8HftqGAyu9MezKdZNpw3Ary6@dpg-csnjpuggph6c73bfpnu0-a.singapore-postgres.render.com/website_portal_9uru',
-#         conn_max_age=600
-#     )
-# }
-
+DATABASES = {
+    'default': dj_database_url.config(
+        # Replace this value with your local database's connection string.
+        default='postgresql://pxel:yYWsgntkKJ4v0qykPoGMMksGxYSplWtE@dpg-cspd4jbtq21c739ro8n0-a.oregon-postgres.render.com/iihcdatabase',
+        conn_max_age=600
+    )
+}
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
@@ -118,16 +117,15 @@ STATIC_URL = '/static/'
 # This is where static files will be collected
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Ensure this is set
 
-# Optional: Add this if you want to include static files from your app
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),  # Adjust this path as needed
+    BASE_DIR / 'static',  # Adjust this path as needed
 ]
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Check if in DEBUG mode
-DEBUG = True  # Set this to False in production
+DEBUG = False  # Set this to False in production
 
 if not DEBUG:
     # Enable the WhiteNoise storage backend for serving static files in production
