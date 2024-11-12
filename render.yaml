@@ -1,7 +1,7 @@
 databases:
   - name: iihcollege
     plan: free
-    databaseName: iihc-database
+    databaseName: iihcdatabase
     user: Pxel
 
 services:
@@ -10,7 +10,7 @@ services:
     name: iihcollege
     runtime: python
     buildCommand: "./build.sh"
-    startCommand: "python -m  iihc_website_portal.asgi:application -k uvicorn.workers.UvicornWorker"
+    startCommand: "python -m  iihc_website_portal.asgi:application"
     envVars:
       - key: DATABASE_URL
         fromDatabase:

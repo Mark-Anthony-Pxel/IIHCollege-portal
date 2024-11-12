@@ -78,13 +78,13 @@ DATABASES = {
     }
 }
 
-# DATABASES = {
-#     'default': dj_database_url.config(
-#         # Replace this value with your local database's connection string.
-#         default='postgresql://website_portal_9uru_user:Z9BTFvOJ8HftqGAyu9MezKdZNpw3Ary6@dpg-csnjpuggph6c73bfpnu0-a.singapore-postgres.render.com/website_portal_9uru',
-#         conn_max_age=600
-#     )
-# }
+DATABASES = {
+    'default': dj_database_url.config(
+        # Replace this value with your local database's connection string.
+        default='postgresql://website_portal_9uru_user:Z9BTFvOJ8HftqGAyu9MezKdZNpw3Ary6@dpg-csnjpuggph6c73bfpnu0-a.singapore-postgres.render.com/website_portal_9uru',
+        conn_max_age=600
+    )
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
