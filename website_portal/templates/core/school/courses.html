@@ -76,62 +76,8 @@
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light mb-1">
-        <a class="navbar-brand" href="{% url 'home' %}"><img width="50px" src="{% static 'website_portal/image/logo2.png'%}" alt="">IIHCollege</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'home' %}">Home</a>
-                </li>
-                {% if not user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'enroll' %}">Enroll Now</a>
-                </li>
-                {% endif %}
-                {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'event' %}">Events</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'contact' %}">Contact</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="{% url 'courses' %}">Courses <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'community' %}">Community</a>
-                </li>
-                {% endif %}
-                {% if not user.is_authenticated %} 
-                <li class="nav-item">
-                    <a class="nav-link active" href="{% url 'courses' %}">Courses <span class="sr-only">(current)</span></a>
-                </li>
-                {% endif %}
-            </ul>
-            <ul class="navbar-nav ml-auto">
-                {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'profile' %}">Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <button class="btn btn-danger logout-button" id="logout-button" data-toggle="modal" data-target="#logoutModal">Logout</button>
-                    </li>
-                {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'login' %}">Login</a>
-                    </li>
-                    {% if request.user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'admin:index' %}">Admin Panel</a>
-                    </li>
-                    {% endif %}
-                {% endif %}
-            </ul>
-        </div>
-    </nav>
+    <!-- deafult header -->
+    {% include 'support-files/header.html' %}
 
     <div class="hero shadow">
         <h1 class="animate-on-scroll">Explore Our Courses</h1>

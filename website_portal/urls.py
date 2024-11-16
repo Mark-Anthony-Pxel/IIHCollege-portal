@@ -13,7 +13,7 @@ from .views import teacher_register, edit_subject, add_subject, remove_subject
 from .views import stem_view, abm_view, humss_view, gas_view, tvl_view
 
 # Importing other views
-from .views import contact, dashboard
+from .views import contact, dashboard, community
 
 #URL path
 from .views import MyAsyncView
@@ -43,7 +43,7 @@ urlpatterns = [
     # Additional Pages
     path('courses/', views.courses, name='courses'),
     path('event/', views.event, name='event'),
-    path('community/', views.community, name='community'),
+    path('community/', community, name='community'),
     path('contact/', contact, name='contact'),
 
     # Teacher Pages

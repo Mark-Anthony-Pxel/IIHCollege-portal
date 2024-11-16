@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 import uuid
 from datetime import date
+from django.core.exceptions import ValidationError
+from .validators import validate_image_size, validate_file_size
 
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='student')
@@ -100,7 +102,21 @@ class Message(models.Model):
     # Optional fields
     attachment = models.FileField(upload_to='attachments/', blank=True, null=True, verbose_name=_('Attachment'))
     is_read = models.BooleanField(default=False, verbose_name=_('Is Read'))
-    
+    image = models.ImageField(
+        blank=True,
+        null=True,
+        upload_to='community_images/',
+        validators=[validate_image_size],
+        help_text=_('Upload an image (max 5MB).')
+    )
+    attachment = models.FileField(
+        upload_to='attachments/',
+        blank=True,
+        null=True,
+        validators=[validate_file_size],
+        help_text=_('Upload an optional file (max 10MB).')
+    )
+
     class Meta:
         verbose_name = _('Message')
         verbose_name_plural = _('Messages')
@@ -147,10 +163,68 @@ class Teacher(models.Model):
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name} - {self.subject}"
 
-from django.db import models
-
 class Subject(models.Model):
     name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
+
+class Community(models.Model):
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    post = models.TextField(null=True, help_text=_('Enter your post here.'))  # Add default here
+    comment = models.TextField(help_text=_('Enter your comment here.'), blank=True, null=True)
+
+    VISIBILITY_CHOICES = [
+        ('public', 'Public'),
+        ('private', 'Private'),
+    ]
+    visibility = models.CharField(max_length=10, choices=VISIBILITY_CHOICES, default='public')
+
+    image = models.ImageField(
+        upload_to='community_images/',
+        blank=True,
+        null=True,
+        validators=[validate_image_size],
+        help_text=_('Upload an image (max 5MB).')
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    attachment = models.FileField(
+        upload_to='attachments/',
+        blank=True,
+        null=True,
+        validators=[validate_file_size],
+        help_text=_('Upload an optional file (max 10MB).')
+    )
+
+    def is_visible_to(self, user):
+        """
+        Determine if the document is visible to the given user.
+        """
+        if self.visibility == 'public':
+            return True
+        elif self.visibility == 'private':
+            return self.user == user  # Assuming you have a user field in your model
+        return False
+
+    def get_visible_content(self, user):
+        """
+        Return the content of the document if visible; otherwise, return a message.
+        """
+        if self.is_visible_to(user):
+            return self.content
+        else:
+            return "This document is private and cannot be viewed."
+
+    class Meta:
+        verbose_name = _('Community')
+        verbose_name_plural = _('Communities')
+        ordering = ['-created_at']  # Order by creation date, newest first
+
+    def __str__(self):
+        return f"Community from {self.teacher} - {self.post[:20]}... on {self.created_at.strftime('%Y-%m-%d %H:%M:%S')}"
+
+    # Optionally, you can add a method to get a short post
+    def short_post(self):
+        return self.post[:50] + '...' if len(self.post) > 50 else self.post
+        

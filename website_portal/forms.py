@@ -2,7 +2,7 @@ from django import forms
 from django.core.validators import validate_email, RegexValidator
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
-from .models import Student, Message, Teacher
+from .models import Student, Message, Teacher, Community
 from django.contrib.auth.models import User
 
 class EnrollForm(forms.ModelForm):
@@ -230,8 +230,15 @@ class EnrollForm(forms.ModelForm):
 class MessageForm(forms.ModelForm):
     class Meta:
         model = Message
-        fields = ['message']
-
+        fields = ['message', 'attachment']  # Include the fields you want to display in the form
+        widgets = {
+            'message': forms.Textarea(attrs={'placeholder': 'Enter your message here...', 'rows': 4}),
+        }
+        labels = {
+            'message': 'Message',
+            'attachment': 'Attachment (optional)',
+        }
+        
 class TeacherForm(forms.ModelForm):
     username = forms.CharField(max_length=150, required=True)
     email = forms.EmailField(required=True)
@@ -272,3 +279,18 @@ class TeacherForm(forms.ModelForm):
         if commit:
             teacher.save()  # Save the Teacher instance
         return teacher
+
+class CommunityForm(forms.ModelForm):
+    class Meta:
+        model = Community
+        fields = ['comment', 'image', 'attachment']
+        widgets = {
+            'comment': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Enter your comment here...'}),
+            'image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'attachment': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'comment': 'Comment',
+            'image': 'Image',
+            'attachment': 'Attachment',
+        }

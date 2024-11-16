@@ -1,0 +1,188 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% if user.is_superuser %}
+            Admin | Homepage
+        {% elif user.is_authenticated %}
+            {% if user.teacher %}
+                Teacher | Homepage
+            {% elif user.student %}
+                Student | Homepage
+            {% endif %}
+        {% else %}
+            IIHC Portal
+        {% endif %}
+    </title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="{% static 'website_portal/image/logo2.png' %}" type="image/x-icon">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+        div.hero2 {
+            padding: 35svh 0;
+        }
+        .hero, .hero2 {
+            background: #b80f3f;    
+            color: #ffffff; 
+            text-align: center;
+            position: relative;
+        }
+        .hero {
+            padding: 100px 0;
+        }
+        .hero h1 {
+            font-size: 3rem;
+        }
+        .hero p {
+            font-size: 1.5rem;
+        }
+        .features {
+            padding: 50px 0;
+        }
+        .footer {
+            background: #343a40; 
+            color: #ffffff; 
+            padding: 20px 0;
+            text-align: center;
+        }
+        .footer a {
+            color: #ffffff; 
+        }
+        .footer a:hover {
+            text-decoration: underline; 
+        }
+        .shadow {
+            box-shadow: 3px 3px 10px 3px #dddddd;
+        }
+        .testimonials {
+            position: relative;
+            overflow: hidden;
+            height: 200px; 
+        }
+        .animate-on-scroll {
+            opacity: 0; /* Start hidden */
+            transform: translateY(50px); /* Start slightly below */
+            transition: opacity 1s ease, transform 0.5s ease; /* Smooth transition */
+        }
+        .animate-on-scroll.visible {
+            opacity: 1; /* Fade in */
+            transform: translateY(0); /* Move into position */
+        }
+        .logout-button {
+            background-color: #dc3545; /* Bootstrap danger color */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .logout-button:hover {
+            background-color: #b61f2e; /* Darker red on hover */
+        }
+    </style>
+</head>
+<body>
+    <!-- header -->
+    {% include 'support-files/header.html' %}
+
+    <!-- hero text -->
+    {% include 'support-files/hero-input.html' %}
+
+
+    <!-- <div class="embed-responsive embed-responsive-21by9">
+        <video class="embed-responsive-item" autoplay muted loop playsinline>
+            <source src="{% static 'website_portal/video/AQMcu6eFVJmWWfBhYerDcRS9Bfnt1PwpGdUR96k42VprK4tuH3oCEKcLxZBhFFB_RSFGMzRJuqI2cJ4RNjLNndQA.mp4' %}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div> -->
+
+    {% if not user.is_authenticated %}
+    <div class="features">
+        <div class="container">
+            <h2>Features</h2>
+            <div class="row">
+                <div class="col-md-4 animate-on-scroll">
+                    <i class="fas fa-book"></i>
+                    <h3>Easy Enrollment</h3>
+                    <p>Access IIHC from anywhere without the need to visit a branch.</p>
+                </div>
+                <div class="col-md-4 animate-on-scroll">
+                    <i class="fas fa-users"></i>
+                    <h3>View Your Grades</h3>
+                    <p>Stay updated with your academic performance at your fingertips.</p>
+                </div>
+                <div class="col-md-4 animate-on-scroll">
+                    <i class="fas fa-rocket"></i>
+                    <h3>Stay Informed</h3>
+                    <p>Get real-time updates on events and announcements.</p>
+                </div>
+                <div class="col-md-4 animate-on-scroll">
+                    <i class="fas fa-headset"></i>
+                    <h3>Contact</h3>
+                    <p>Get assistance whenever you need it.</p>
+                </div>
+                <div class="col-md-4 animate-on-scroll">
+                    <i class="fas fa-book-open"></i>
+                    <h3>Course Catalog</h3>
+                    <p>Browse our extensive course catalog and find the perfect fit for your academic goals.</p>
+                </div>
+                <div class="col-md-4 animate-on-scroll">
+                    <i class="fas fa-users"></i>
+                    <h3>Community Engagement</h3>
+                    <p>Join our vibrant community and connect with fellow students.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="testimonials">
+        <div class="container">
+            <h2>What Our Students Say</h2>
+            <div id="testimonialsCarousel" class="carousel slide" data-ride="carousel" data-interval="5000">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <p>"IIHCollege has transformed my learning experience!"</p>
+                        <p>- John</p>
+                    </div>
+                    <div class="carousel-item">
+                        <p>"The online resources are incredibly helpful!"</p>
+                        <p>- Eman</p>
+                    </div>
+                    <div class="carousel-item">
+                        <p>"I love the flexibility of the modular learning options!"</p>
+                        <p>- Chris</p>
+                    </div>
+                </div>
+                <a class="carousel-control-prev" href="#testimonialsCarousel" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#testimonialsCarousel" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p class="text-muted">© 2024 IIHCollege. All rights reserved.</p>
+            <p class="text-muted">
+                <a href="{% url 'privacy_policy' %}" class="text-white">Privacy Policy</a> |
+                <a href="{% url 'terms_of_service' %}" class="text-white">Terms of Service</a>
+            </p>
+        </div>
+    </footer>
+    {% endif %}
+
+    {% include 'support-files/logout-function.html' %}
+</body>
+</html>

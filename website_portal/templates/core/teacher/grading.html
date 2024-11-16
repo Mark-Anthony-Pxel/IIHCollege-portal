@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grading</title>
+    <!-- Bootstrap CSS from CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa; /* Light background */
+        }
+        .card {
+            border: none;
+            border-radius: 15px; /* Rounded corners */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Shadow effect */
+            transition: transform 0.2s; /* Smooth transition */
+        }
+        .card:hover {
+            transform: translateY(-1px); /* Lift effect on hover */
+        }
+        .table th, .table td {
+            vertical-align: middle; /* Center align */
+        }
+        h1, h2 {
+            color: #343a40; /* Darker text color */
+        }
+    </style>
+</head>
+<body>
+    <!-- header -->
+    {% include 'support-files/header.html' %}
+
+    <div class="container mt-5">
+        <div class="card p-4">
+            <h1 class="text-center">Welcome, {{ user.first_name }} {{ user.last_name }}</h1>
+            <h2>Your Students</h2>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Name</th>
+                            <th>Class</th>
+                            <th>Section</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in students %}
+                        <tr>
+                            <td>{{ student.first_name }} {{ student.last_name }}</td>
+                            <td>{{ student.classroom }}</td>
+                            <td>{{ student.section }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>Your Subjects</h2>
+            <ul class="list-group mb-4">
+                {% for subject in subjects %}
+                <li class="list-group-item">{{ subject.name }}</li>
+                {% endfor %}
+            </ul>
+
+            <h2>Departments</h2>
+            <ul class="list-group mb-4">
+                {% for department in departments %}
+                <li class="list-group-item">{{ department.name }}</li>
+                {% endfor %}
+            </ul>
+
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies from CDN -->
+    {% include 'support-files/logout-function.html' %}
+</body>
+</html>

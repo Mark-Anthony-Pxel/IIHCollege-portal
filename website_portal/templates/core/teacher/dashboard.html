@@ -29,31 +29,8 @@
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light mb-1">
-        <a class="navbar-brand" href="{% url 'home' %}">
-            <img width="50px" src="{% static 'website_portal/image/logo2.png'%}" alt="logo">IIHCollege</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
-                {% if not user.is_authenticated %}
-                <li class="nav-item"><a class="nav-link" href="{% url 'enroll' %}">Enroll Now</a></li>
-                {% endif %}
-                {% if user.is_superuser %}
-                <li class="nav-item active"><a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a></li>
-                {% endif %}
-            </ul>
-            <ul class="navbar-nav ml-auto">
-                {% if user.is_authenticated %}
-                    <li class="nav-item"><button class="btn btn-danger logout-button p-2" id="logout-button" data-toggle="modal" data-target="#logoutModal">Logout</button></li>
-                {% else %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
-                {% endif %}
-            </ul>
-        </div>
-    </nav>
+    <!-- header -->
+    {% include 'support-files/header.html' %}
 
     <div class="container mt-5">
         <div class="card p-4">
@@ -130,9 +107,7 @@
     </div>
 
     <!-- Bootstrap JS and dependencies from CDN -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    {% include 'support-files/logout-function.html' %}
     <script>
         function clearForm() {
             document.getElementById('studentForm').reset();

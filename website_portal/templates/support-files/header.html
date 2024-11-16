@@ -1,0 +1,90 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-light mb-1">
+    <a class="navbar-brand" href="{% url 'home' %}">
+        <img width="50px" src="{% static 'website_portal/image/logo2.png' %}" alt="logo">IIHCollege
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
+        </li>
+        {% if not user.is_authenticated %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'enroll' %}">Enroll Now</a>
+        </li>        
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'courses' %}">Courses</a>
+        </li>
+        {% endif %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'community' %}">Community</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'event' %}">Events</a>
+        </li>
+{% if user.student %}
+</li>
+<div class="nav-link ml-2">|</div>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'contact' %}">Contact</a>
+</li>
+{% elif user.is_superuser %}
+</li>
+    <div class="nav-link ml-2">|</div>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'teacher' %}">Register a teacher</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'teacher_list' %}">Teacher List</a>
+</li>
+{% elif user.teacher %}
+</li>
+<div class="nav-link ml-2">|</div>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'contact' %}">Contact</a>
+</li>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'grading' %}">Grading</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'lesson' %}">Lesson</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'subject' %}">Subject</a>
+</li>
+{% endif %}
+</ul>
+      
+<ul class="navbar-nav ml-auto">
+    {% if user.is_superuser %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'admin:index' %}">System</a>
+    </li>
+    {% else %}
+    {% if user.student %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+    </li>
+    {% endif %}
+    {% endif %}
+    {% if not user.is_authenticated %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">Login</a>
+        </li>
+    {% else %}
+    <li class="nav-item">
+        <button class="btn btn-danger logout-button" id="logout-button" data-toggle="modal" data-target="#logoutModal">Logout</button>
+    </li>
+    {% endif %}
+</ul>
+</div>
+</nav>

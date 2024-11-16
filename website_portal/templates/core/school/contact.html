@@ -1,0 +1,238 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - IIHCollege</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: #f0f4f8; /* Light background */
+            font-family: 'Roboto', sans-serif; /* Unique font */
+        }
+        .hero {
+            background: #b80f3f;    
+            color: #ffffff; /* White text */
+            padding: 100px 0;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 3rem;
+        }
+        .hero p {
+            font-size: 1.5rem;
+        }
+        .contact-container {
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 40px;
+            background: #fdfdfd;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+            text-align: left;
+        }
+        button {
+            background: #007BFF; /* Bootstrap primary color */
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s, transform 0.2s;
+        }
+        button:hover {
+            background: #0056b3; /* Darker shade for hover effect */
+            transform: translateY(-2px);
+        }
+        footer {
+            background: #343a40; /* Dark background for footer */
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+        footer a {
+            color: #ffffff; /* White links */
+        }
+        footer a:hover {
+            text-decoration: underline; /* Underline on hover */
+        }
+        .preview {
+            margin-top: 10px;
+        }
+        .preview img {
+            max-width: 100%; /* Responsive image */
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    {% include 'support-files/header.html' %} <!-- Include the custom header here -->
+
+    {% if user.student %}
+    <div class="hero shadow mb-5">
+        <h1 class="animate-on-scroll">Get in Touch with Us</h1>
+        <p class="animate-on-scroll">Have a question or concern? We're here to help!</p>
+    {% elif user.teacher %}
+        <h1 class="animate-on-scroll">Students Feedback</h1>
+        <p class="animate-on-scroll">Question or concern of IIHCollege students</p>
+    {% endif %}
+    </div>
+    {% if user.student %}
+    <h2>Contact Form</h2>
+    <div class="container">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="message">Message</label>
+            <textarea rows="8" id="message" name="message" class="form-control" required placeholder="Enter your message here..."></textarea>
+        </div>
+        <div class="form-group">
+            <label for="id_image">{{ form.image.label }}</label>
+            <input type="file" name="image" id="id_image" class="form-control-file" onchange="previewImage(event)">
+            {{ form.image.errors }}
+            <div class="preview" id="image-preview"></div>
+            <small class="form-text text-muted">{{ form.image.help_text }}</small>
+        </div>
+        <div class="form-group">
+            <label for="id_attachment">{{ form.attachment.label }}</label>
+            <input type="file" name="attachment" id="id_attachment" class="form-control-file" onchange="previewAttachment(event)">
+            {{ form.attachment.errors }}
+            <div class="preview" id="attachment-preview"></div>
+            <small class="form-text text-muted">{{ form.attachment.help_text }}</small>
+        </div>
+        <button type="submit" class="btn btn-primary">Send Message</button>
+    </form>
+
+    {% elif user.teacher and user.superuser %}
+        <h2 class="mt-5">Submitted Messages</h2>
+        <ul class="body-post m-5">
+            {% for message in messages %}
+            <li class="post p-5">
+                <strong>{{ message.student.last_name|upper }}, {{ message.student.first_name|upper }}</strong> ({{ message.student.email }})<br>
+                <p class="m-2">{{ message.message }}</p><br>
+                {% if not message.approved %}
+                <form method="post" action="{% url 'approve_message' message.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit">Approve</button>
+                </form>
+                {% else %}
+                <span class="text-success">Approved</span>
+                {% endif %}
+                <form method="post" action="{% url 'delete_message' message.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" onclick="return confirm('Are you sure you want to delete this message?');">Delete</button>
+                </form>
+            </li>
+            {% empty %}
+            <li class="post">No messages submitted yet.</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+</div>
+
+    <footer class="footer mt-5">
+        <div class="container">
+            <p class="text-muted"> © 2024 IIHCollege. All rights reserved.</p>
+            <p class="text-muted">
+                <a href="{% url 'privacy_policy' %}" class="text-white">Privacy Policy</a> |
+                <a href="{% url 'terms_of_service' %}" class="text-white">Terms of Service</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Logout Confirmation Modal -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to log out?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <form action="{% url 'logout' %}" method="post" id="logout-form">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="{% static 'website_portal/js/script.js' %}"></script>
+    <script>
+    function initScrollAnimation(selector) {
+        const elements = document.querySelectorAll(selector);
+        
+        function handleScroll() {
+            elements.forEach(element => {
+                const rect = element.getBoundingClientRect();
+                if (rect.top <= window.innerHeight && rect.bottom >= 0) {
+                    element.classList.add('visible');
+                } else {
+                    element.classList.remove('visible');
+                }
+            });
+        }
+
+        // Initial check in case elements are already in view
+        handleScroll();
+
+        // Add event listener for scroll event
+        window.addEventListener('scroll', handleScroll);
+    }
+
+    // Initialize the scroll animation for elements with the class 'animate-on-scroll'
+    document.addEventListener('DOMContentLoaded', function() {
+        initScrollAnimation('.animate-on-scroll');
+    });
+
+    function previewImage(event) {
+        const previewContainer = document.getElementById('image-preview');
+        previewContainer.innerHTML = ''; // Clear previous previews
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result; // Set the image source to the file's data
+                previewContainer.appendChild(img); // Append the image to the preview container
+            };
+            reader.readAsDataURL(file); // Read the file as a data URL
+        }
+    }
+
+    function previewAttachment(event) {
+        const previewContainer = document.getElementById('attachment-preview');
+        previewContainer.innerHTML = ''; // Clear previous previews
+        const file = event.target.files[0];
+        if (file) {
+            const fileInfo = document.createElement('p');
+            fileInfo.textContent = `Uploaded attachment: ${file.name}`; // Display the file name
+            previewContainer.appendChild(fileInfo); // Append the file info to the preview container
+        }
+    }
+    </script>
+</body>
+</html>

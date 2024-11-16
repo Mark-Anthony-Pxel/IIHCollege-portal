@@ -86,6 +86,9 @@
     <title>Student List</title>
 </head>
 <body>
+    <!-- header -->
+    {% include 'support-files/header.html' %}
+
     <header>
         <h1>Student Enrollment System</h1>
     </header>
@@ -126,9 +129,8 @@
         <p class="no-students">No students enrolled yet.</p>
     {% endif %}
     </main>
-    <footer>
-        <p>&copy; 2024 IIHCollege. All rights reserved.</p>
-    </footer>
+    {% include 'support-files/logout-function.html' %}
+
     <script>
         function confirmDelete(event, form) {
             event.preventDefault(); // Prevent the form from submitting immediately
