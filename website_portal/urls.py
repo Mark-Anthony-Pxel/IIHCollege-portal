@@ -7,8 +7,7 @@ from .views import login, logout_view
 from .views import delete_student, approve_student, approve_message, delete_message
 
 # Importing views related to subjects and teachers
-from .views import teacher_register, edit_subject, add_subject, remove_subject
-
+from .views import teacher_register, edit_subject, add_subject, remove_subject, delete_community
 # Importing views related to specific strands
 from .views import stem_view, abm_view, humss_view, gas_view, tvl_view
 
@@ -40,6 +39,7 @@ urlpatterns = [
     path('approve-student/<uuid:student_id>/', approve_student, name='approve_student'),  # Fixed path
     path('delete-student/<uuid:student_id>/', delete_student, name='delete_student'),  # Fixed path
 
+
     # Additional Pages
     path('courses/', views.courses, name='courses'),
     path('event/', views.event, name='event'),
@@ -69,7 +69,7 @@ urlpatterns = [
     path('success/', views.success, name='success'),
 
     # contact
-    path('approve-message/<int:message_id>/', approve_message, name='approve_message'),
+    path('approve-message/<int:messsage_id>/', approve_message, name='approve_message'),
     path('delete-message/<int:message_id>/', delete_message, name='delete_message'),  # Add this line
 
     #Admin Page
@@ -78,6 +78,9 @@ urlpatterns = [
     path('add_subject/', add_subject, name='add_subject'),
     path('edit_subject/', edit_subject, name='edit_subject'),
     path('remove_subject/', remove_subject, name='remove_subject'),
+
+    path('community/delete/<int:community_id>/', delete_community, name='delete_community'),
+
 
     # URL path
     path('async-data/', MyAsyncView.as_view(), name='async_data'),  

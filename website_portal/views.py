@@ -17,6 +17,7 @@ from django.http.response import StreamingHttpResponse
 from django.http import StreamingHttpResponse
 from django.views import View
 from django.shortcuts import render
+from django.views.decorators.http import require_http_methods
 
 class MyAsyncView(View):
     async def get(self, request, *args, **kwargs):
@@ -93,7 +94,6 @@ def delete_message(request, message_id):
     message = get_object_or_404(Message, id=message_id)
     message.delete()
     return redirect('contact')
-
 
 def user_login(request):
     if request.method == 'POST':
@@ -425,3 +425,14 @@ def community(request):
         'community_entries': community_entries,  # Use a consistent name
         'form': form,
     })
+
+def delete_community(request, community_id):
+    community = get_object_or_404(Community, id=community_id)
+    
+    # Check if the user is allowed to delete (you may want to implement permissions here)
+    if request.method == 'POST':
+        community.delete()
+        messages.success(request, 'Community post deleted successfully.')
+        return redirect('community')  # Redirect to the list of communities or another appropriate page
+
+    return render(request, 'core/edit-delete/delete-post.html', {'community': community})

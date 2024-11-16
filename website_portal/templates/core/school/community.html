@@ -14,7 +14,7 @@
       rel="stylesheet"
     />
     <!-- Unique Font -->
-    <style>
+      <style>
       body {
         background: #f0f4f8; /* Light background */
         font-family: "Roboto", sans-serif; /* Unique font */
@@ -130,8 +130,8 @@
     </div>
     {% endif %}
     
-    <div class="container mt-5">
-      <h2 class="mb-4">
+
+      <h2 class="mb-4 text-center">
         {% if user.teacher %}
         Teacher Post
         {% elif user.student %}
@@ -140,68 +140,75 @@
         Community
         {% endif %}
       </h2>
-
-
-{% if user.teacher %}
-<!-- add the post here -->
-
-{% elif user.student %}
-
-
-
-{% endif %}
-{% if not user.is_authenticated %}
-
-
-{% endif %}
-<!-- </div> -->
-  <ul id="community-list">
-    {% for community in community_entries %}
-            {% if request.user.is_authenticated and request.user.teacher == community.teacher %}
-            <div id="post-{{ community.id }}" class="card mb-3">
-              {% if community.image %}
-                <img class="card-img-top" src="{{ community.image.url }}" alt="Post Image">
-              {% endif %}
-              {% if community.attachment %}
-                <a class="card-img-top" href="{{ community.attachment.url }}">Download Attachment</a>
-              {% endif %}
-              <div class="card-body">
-                <h5 class="card-title">{{ community.teacher.first_name }}</h5>
-                <p class="card-text">{{ community.post }}</p>
-                <small class="card-text">Visibility: {{ community.visibility }}</small>
-                <br>
-                <small class="card-text">Posted on: {{ community.created_at }}</small>
-                <p>
-                  <button class="btn btn-primary " type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                    settings
-                  </button>
-                </p>
-                <div class="collapse" id="collapseExample">
-                  <button class="edit-btn btn btn-primary btn-sm" data-id="{{ community.id }}">Edit</button>
-                  <button class="delete-btn btn btn-danger btn-sm" data-id="{{ community.id }}">Delete</button>
-                </div>
-              </div>
-            </div>
-          {% endif %}
-
-    {% empty %}
-        <p>No posts yet.</p>
-    {% endfor %}
-</ul>   
-
+<div class="container">
+  {% if user.teacher %}
 {% include 'support-files/post.html' %}
-
+<hr class="mt-4 mb-5">
+{% endif %}
+        <div id="community">
+        {% for community in community_entries %}
+            {% if community.visibility == "public" %}
+                <div id="post-{{ community.id }}" class="card mb-3">
+                    {% if community.image %}
+                        <img class="card-img-top" src="{{ community.image.url }}" alt="Post Image">
+                    {% endif %}
+                    {% if community.attachment %}
+                        <a class="card btn-light m-4 p-4" href="{{ community.attachment.url }}">Download Attachment</a>
+                    {% endif %}
+                    <div class="card-body">
+                      <small class="card-text">Visibility: {{ community.visibility }}</small>
+                        <h5 class="card-title">{{ community.teacher }}</h5>
+                        <p class="card-text">{{ community.post }}</p>
+                        <small class="card-text">Posted on: {{ community.created_at }}</small>
+                        <p>
+                            <button class="btn btn-secondary mt-4" type="button" data-toggle="collapse" data-target="#collapseExample-{{ community.id }}" aria-expanded="false" aria-controls="collapseExample">
+                                settings
+                            </button>
+                        </p>
+                        {% if user.teacher %}
+                        <div class="collapse" id="collapseExample-{{ community.id }}">
+                          <a class="btn btn-danger" href="{% url 'delete_community' community.id %}">Delete</a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% elif request.user.teacher == community.teacher or request.user.student %}
+                <div id="post-{{ community.id }}" class="card mb-3">
+                    {% if community.image %}
+                        <img class="card-img-top" src="{{ community.image.url }}" alt="Post Image">
+                    {% endif %}
+                    {% if community.attachment %}
+                        <a class="card btn-light m-4 p-4" href="{{ community.attachment.url }}">Download Attachment</a>
+                    {% endif %}
+                     <div class="card-body">
+                        <h5 class="card-title">{{ community.teacher }}</h5>
+                        <p class="card-text">{{ community.post }}</p>
+                        <small class="card-text">Visibility: {{ community.visibility }}</small>
+                        <br>
+                        <small class="card-text">Posted on: {{ community.created_at }}</small>
+                        <p>
+                            <button class="btn btn-secondary mt-4" type="button" data-toggle="collapse" data-target="#collapseExample-{{ community.id }}" aria-expanded="false" aria-controls="collapseExample">
+                                settings
+                            </button>
+                        </p>
+                        <div class="collapse" id="collapseExample-{{ community.id }}">
+                          <a class="btn btn-danger" href="{% url 'delete_community' community.id %}">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% empty %}
+            <p>No posts yet.</p>
+        {% endfor %}
+        </div>
+  </div>
 {% include 'support-files/loader.html' %}
 
+{% include 'support-files/footer.html' %}
 
-<!-- testing remove div -->
-</div>
-</div>
-<!-- end -->
+{% include 'support-files/logout-function.html' %}
 
-      {% include 'support-files/footer.html' %}
 
-      {% include 'support-files/logout-function.html' %}
 <script>
       function previewImage(event) {
         const previewContainer = document.getElementById('image-preview');
