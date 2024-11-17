@@ -1,0 +1,68 @@
+<form class="bg-light p-3" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-group">
+        <label class="form-label" for="visibility">Select Visibility</label>
+        <select class="form-control" id="visibility" name="visibility" required>
+            <option value="public">Public</option>
+            <option value="private">Private (Students Only)</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="teacher">Teacher</label>
+        <input type="text" class="form-control" id="teacher" name="teacher" value="{{ user.first_name|capfirst }} {{ user.last_name|capfirst }}" readonly>
+    </div>
+
+    <div class="form-group">
+        <label for="post">Post</label>
+        <textarea class="form-control" id="post" name="post" rows="4" placeholder="Enter your post here..." required></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="images">Images</label>
+        <input type="file" class="btn btn-outline-secondary form-control-file" id="images" 
+               name="image" accept="image/*" multiple onchange="previewImages(event)">
+        <div class="preview" id="image-preview"></div>
+    </div>
+
+    <div class="form-group">
+        <label for="attachment">Attachment</label>
+        <input type="file" class="btn btn-outline-secondary form-control-file" id="attachment" 
+               name="attachment" onchange="previewAttachment(event)">
+        <div class="preview" id="attachment-preview"></div>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+</form>
+
+<script>
+function previewImages(event) {
+    const previewContainer = document.getElementById('image-preview');
+    previewContainer.innerHTML = ''; // Clear previous previews
+    const files = event.target.files;
+
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.style.maxWidth = '40%';
+            img.style.margin = '10px';
+            previewContainer.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+function previewAttachment(event) {
+    const previewContainer = document.getElementById('attachment-preview');
+    previewContainer.innerHTML = ''; // Clear previous previews
+    const file = event.target.files[0];
+    if (file) {
+        const fileInfo = document.createElement('p');
+        fileInfo.textContent = `Uploaded attachment: ${file.name}`; // Display the file name
+        previewContainer.appendChild(fileInfo); // Append the file info to the preview container
+    }
+}
+</script>

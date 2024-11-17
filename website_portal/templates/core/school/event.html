@@ -6,164 +6,189 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Events - IIHCollege</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{% static   'website_portal/css/event.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"> <!-- Unique Font -->
     <style>
-body {
-    background: #f0f4f8; /* Light background */
-    font-family: 'Roboto', sans-serif; /* Unique font */
-}
-.hero {
-    background: #b80f3f;    
-    color: #ffffff; /* White text */
-    padding: 100px 0;
-    text-align: center;
-    position: relative;
-}
-.hero h1 {
-    font-size: 3rem;
-}
-.hero p {
-    font-size: 1.5rem;
-}
-.features {
-    padding: 50px 0;
-}
-.features .feature {
-    margin-bottom: 20px;
-}
-.features .feature i {
-    font-size: 2rem;
-    margin-bottom: 10px;
-    color: #007bff; /* Icon color */
-}
-.no-events {
-    padding: 50px 0;
-    text-align: center;
-    font-size: 1.2rem;
-    color: #222; /* Grey color for the message */
-}
-.footer {
-    background: #343a40; /* Dark background for footer */
-    color: #ffffff; /* White text */
-    padding: 20px 0;
-    text-align: center;
-}
-.footer a {
-    color: #ffffff; /* White links */
-}
-.footer a:hover {
-    text-decoration: underline; /* Underline on hover */
-}
-
-.animate-on-scroll {
-    opacity: 0; /* Start hidden */
-    transform: translateY(50px); /* Start slightly below */
-    transition: opacity 1s ease, transform 0.5s ease; /* Smooth transition */
-}
-
-.animate-on-scroll.visible {
-    opacity: 1; /* Fade in */
-    transform: translateY(0); /* Move into position */
-}
-
-.logout-button {
-    background-color: #dc3545; /* Bootstrap danger color */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 15px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-.logout-button:hover {
-    background-color: #b61f2e; /* Darker red on hover */
-}
+        body {
+            background: #f0f4f8; /* Light background */
+            font-family: 'Roboto', sans-serif; /* Unique font */
+        }
+        .hero {
+            background: #b80f3f;    
+            color: #ffffff; /* White text */
+            padding: 100px 0;
+            text-align: center;
+            position: relative;
+        }
+        .hero h1 {
+            font-size: 3rem;
+        }
+        .hero p {
+            font-size: 1.5rem;
+        }
+        .features {
+            padding: 50px 0;
+        }
+        .features .feature {
+            margin-bottom: 20px;
+        }
+        .features .feature i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #007bff; /* Icon color */
+        }
+        .no-events {
+            padding: 50px 0;
+            text-align: center;
+            font-size: 1.2rem;
+            color: #222; /* Grey color for the message */
+        }
+        .footer {
+            background: #343a40; /* Dark background for footer */
+            color: #ffffff; /* White text */
+            padding: 20px 0;
+            text-align: center;
+        }
+        .footer a {
+            color: #ffffff; /* White links */
+        }
+        .footer a:hover {
+            text-decoration: underline; /* Underline on hover */
+        }
+        .animate-on-scroll {
+            opacity: 0; /* Start hidden */
+            transform: translateY(50px); /* Start slightly below */
+            transition: opacity 1s ease, transform 0.5s ease; /* Smooth transition */
+        }
+        .animate-on-scroll.visible {
+            opacity: 1; /* Fade in */
+            transform: translateY(0); /* Move into position */
+        }
+        .logout-button {
+            background-color: #dc3545; /* Bootstrap danger color */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .logout-button:hover {
+            background-color: #b61f2e; /* Darker red on hover */
+        }
+        .preview {
+            margin-top: 10px;
+        }
+        .preview img {
+            max-width: 60%; /* Responsive image */
+            height: auto;
+        }
     </style>
 </head>
 <body>
-    <!-- deafult header -->
     {% include 'support-files/header.html' %}
 
     <div class="hero shadow">
         <h1 class="animate-on-scroll">Upcoming Events</h1>
-        <p  class="animate-on-scroll">Join us for our exciting events!</p>
+        <p class="animate-on-scroll">Join us for our exciting events!</p>
     </div>
 
-    <div class="features">
-        {% if events %}
-            <!-- Display events here -->
-            {% for event in events %}
-                <div class="feature">
-                    <h2>{{ event.title }}</h2>
-                    <p>{{ event.description }}</p>
-                    <p>Date: {{ event.date }}</p>
-                </div>
-            {% endfor %}
-        {% else %}
-            <div class="no-events">
-                <p>There are currently no upcoming events. Check back soon for updates!</p>
-            </div>
+    <div class="container">
+        {% if user.teacher %}
+            {% include 'support-files/post-event.html' %}    
         {% endif %}
-    </div>
 
-    <div class="footer">
-        <p>&copy; 2024 IIHCollege. All rights reserved.</p>
-    </div>
-
-        <!-- Logout Confirmation Modal -->
-        <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        Are you sure you want to log out?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <form action="{% url 'logout' %}" method="post" id="logout-form">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-danger">Logout</button>
-                        </form>
-                    </div>
+        <div id="event">
+            {% if events %}
+                {% for event in events %}
+                    {% if event.visibility == "public" %}
+                        <div id="post-{{ event.id }}" class="card mb-3">
+                            {% if event.image %}
+                                <img class="card-img-top" src="{{ event.image.url }}" alt="Post Image">
+                            {% endif %}
+                            {% if event.attachment %}
+                                <a class="card btn-light m-4 p-4" href="{{ event.attachment.url }}">{{ event.attachment }}</a>
+                            {% endif %}
+                            <div class="card-body">
+                                <small class="card-text">Visibility: {{ event.visibility }}</small>
+                                <h5 class="card-title">{{ event.teacher }}</h5>
+                                <p class="card-text">{{ event.post }}</p>
+                                <small class="card-text">Posted on: {{ event.created_at }}</small>
+                                <p>
+                                    <button class="btn btn-secondary mt-4" type="button" data-toggle="collapse" data-target="#collapseExample- {{ event.id }}" aria-expanded="false" aria-controls="collapseExample">
+                                        settings
+                                    </button>
+                                </p>
+                                {% if user.teacher %}
+                                    <div class="collapse" id="collapseExample-{{ event.id }}">
+                                        <a class="btn btn-danger" href="{% url 'delete' event.id %}">Delete</a>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% elif request.user.teacher == event.teacher or request.user.student %}
+                        <div id="post-{{ event.id }}" class="card mb-3">
+                            {% if event.image %}
+                                <img class="card-img-top" src="{{ event.image.url }}" alt="Post Image">
+                            {% endif %}
+                            {% if event.attachment %}
+                                <a class="card btn-light m-4 p-4" href="{{ event.attachment.url }}">{{ event.attachment }}</a>
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title">{{ event.teacher }}</h5>
+                                <p class="card-text">{{ event.post }}</p>
+                                <small class="card-text">Visibility: {{ event.visibility }}</small>
+                                <br>
+                                <small class="card-text">Posted on: {{ event.created_at }}</small>
+                                <p>
+                                    <button class="btn btn-secondary mt-4" type="button" data-toggle="collapse" data-target="#collapseExample-{{ event.id }}" aria-expanded="false" aria-controls="collapseExample">
+                                        settings
+                                    </button>
+                                </p>
+                                <div class="collapse" id="collapseExample-{{ event.id }}">
+                                    <a class="btn btn-danger" href="{% url 'delete' event.id %}">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <div class="no-events">
+                    <p>There are currently no upcoming events. Check back soon for updates!</p>
                 </div>
-            </div>
+            {% endif %}
         </div>
+    </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    {% include 'support-files/loader.html' %}
+    {% include 'support-files/footer.html' %}
+    {% include 'support-files/logout-function.html' %}
+
     <script>
-    function initScrollAnimation(selector) {
-    const elements = document.querySelectorAll(selector);
-    
-    function handleScroll() {
-        elements.forEach(element => {
-            const rect = element.getBoundingClientRect();
-            if (rect.top <= window.innerHeight && rect.bottom >= 0) {
-                element.classList.add('visible');
-            } else {
-                element.classList.remove('visible');
+        function initScrollAnimation(selector) {
+            const elements = document.querySelectorAll(selector);
+            
+            function handleScroll() {
+                elements.forEach(element => {
+                    const rect = element.getBoundingClientRect();
+                    if (rect.top <= window.innerHeight && rect.bottom >= 0) {
+                        element.classList.add('visible');
+                    } else {
+                        element.classList.remove('visible');
+                    }
+                });
             }
+
+            // Initial check in case elements are already in view
+            handleScroll();
+
+            // Add event listener for scroll event
+            window.addEventListener('scroll', handleScroll);
+        }
+
+        // Initialize the scroll animation for elements with the class 'animate-on-scroll'
+        document.addEventListener('DOMContentLoaded', function() {
+            initScrollAnimation('.animate-on-scroll');
         });
-    }
-
-    // Initial check in case elements are already in view
-    handleScroll();
-
-    // Add event listener for scroll event
-    window.addEventListener('scroll', handleScroll);
-}
-
-// Initialize the scroll animation for elements with the class 'animate-on-scroll'
-document.addEventListener('DOMContentLoaded', function() {
-    initScrollAnimation('.animate-on-scroll');
-});
     </script>
 </body>
 </html>

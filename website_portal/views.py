@@ -18,6 +18,8 @@ from django.http import StreamingHttpResponse
 from django.views import View
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
+from django.conf import settings
+
 
 class MyAsyncView(View):
     async def get(self, request, *args, **kwargs):
@@ -72,24 +74,40 @@ def courses(request):
 
 def contact(request):
     if request.method == 'POST':
-        form = MessageForm(request.POST)
-        if form.is_valid():
-            message = form.save(commit=False)
-            message.student = request.user.student  # Assuming you have a user model linked to Student
-            message.save()
-            return redirect('contact')  # Redirect to the same page or another page
-    else:
-        form = MessageForm()
+        form = MessageForm(request.POST)  # Initialize the form with POST data
 
-    messages = Message.objects.all()  # Fetch all messages
-    return render(request, 'core/school/contact.html', {'form': form, 'messages': messages})
+        if form.is_valid():
+            message = form.save(commit=False)  # Create a Message instance but don't save it yet
+            # Assuming you have a related Student model linked to the User model
+            if hasattr(request.user, 'student'):
+                message.student = request.user.student  # Set the student field
+                message.save()  # Save the instance
+                messages.success(request, 'Your message has been sent successfully!')
+                return redirect('contact')  # Redirect to the same page after submission
+            else:
+                # Handle the case where the user is not a student
+                messages.error(request, "You must be a student to send a message.")
+        else:
+            # If the form is not valid, return the errors to the template
+            messages.error(request, 'There was an error in your submission. Please correct the errors below.')
+    else:
+        form = MessageForm()  # Create an empty form for GET requests
+
+    # Fetch all messages to display
+    messages_list = Message.objects.all()  # Fetch all messages
+
+    return render(request, 'core/school/contact.html', {
+        'form': form,
+        'messages': messages_list,  # Use a consistent name
+    })
 
 def approve_message(request, message_id):
+    print(f"Received message_id: {message_id}")  # Debugging output
     message = Message.objects.get(id=message_id)
     message.approved = True
     message.save()
-    return redirect('contact')  # Redirect back to the message list
-
+    return redirect('contact')  
+    
 def delete_message(request, message_id):
     message = get_object_or_404(Message, id=message_id)
     message.delete()
@@ -426,13 +444,14 @@ def community(request):
         'form': form,
     })
 
-def delete_community(request, community_id):
+def delete(request, community_id):
+    # Retrieve the community object or return a 404 if it doesn't exist
     community = get_object_or_404(Community, id=community_id)
-    
-    # Check if the user is allowed to delete (you may want to implement permissions here)
-    if request.method == 'POST':
-        community.delete()
-        messages.success(request, 'Community post deleted successfully.')
-        return redirect('community')  # Redirect to the list of communities or another appropriate page
 
+    # Check if the request method is POST to confirm deletion
+    if request.method == 'POST':
+        community.delete()  # Delete the community object
+        return redirect(reverse('community'))  # Redirect to a specific view after deletion
+
+    # Optionally, you can render a confirmation page if the request method is not POST
     return render(request, 'core/edit-delete/delete-post.html', {'community': community})

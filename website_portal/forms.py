@@ -227,18 +227,23 @@ class EnrollForm(forms.ModelForm):
         emergency_contact_phone = self.cleaned_data['emergency_contact_phone']
         return self.validate_phone_number(emergency_contact_phone)
 
+from django import forms
+from .models import Message
+
 class MessageForm(forms.ModelForm):
     class Meta:
         model = Message
-        fields = ['message', 'attachment']  # Include the fields you want to display in the form
-        widgets = {
-            'message': forms.Textarea(attrs={'placeholder': 'Enter your message here...', 'rows': 4}),
-        }
+        fields = ['message', 'attachment', 'image']
         labels = {
+            'image': 'Image (optional)',
             'message': 'Message',
             'attachment': 'Attachment (optional)',
         }
-        
+        help_texts = {
+            'image': 'Upload an image (optional, max 5MB).',
+            'attachment': 'Upload an optional file (max 10MB).',
+        }
+
 class TeacherForm(forms.ModelForm):
     username = forms.CharField(max_length=150, required=True)
     email = forms.EmailField(required=True)

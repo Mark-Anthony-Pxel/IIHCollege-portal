@@ -100,29 +100,28 @@ class Message(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     # Optional fields
-    attachment = models.FileField(upload_to='attachments/', blank=True, null=True, verbose_name=_('Attachment'))
-    is_read = models.BooleanField(default=False, verbose_name=_('Is Read'))
     image = models.ImageField(
         blank=True,
         null=True,
-        upload_to='community_images/',
+        upload_to='message/',
         validators=[validate_image_size],
-        help_text=_('Upload an image (max 5MB).')
+        help_text=_('Upload an image (optional, max 5MB).')
     )
     attachment = models.FileField(
-        upload_to='attachments/',
+        upload_to='message-attachments/',
         blank=True,
         null=True,
         validators=[validate_file_size],
         help_text=_('Upload an optional file (max 10MB).')
     )
+    is_read = models.BooleanField(default=False, verbose_name=_('Is Read'))
 
     class Meta:
         verbose_name = _('Message')
         verbose_name_plural = _('Messages')
 
     def __str__(self):
-        return f"Message from {self.student} - {self.subject or 'No Subject'}"
+        return f"Message from {self.student} - {self.message[:20]}..."  # Display first 20 characters of the message
 
 class Teacher(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='teacher', null=True, blank=True)
@@ -181,7 +180,7 @@ class Community(models.Model):
     visibility = models.CharField(max_length=10, choices=VISIBILITY_CHOICES, default='public')
 
     image = models.ImageField(
-        upload_to='community_images/',
+        upload_to='community/images',
         blank=True,
         null=True,
         validators=[validate_image_size],
@@ -190,7 +189,7 @@ class Community(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     attachment = models.FileField(
-        upload_to='attachments/',
+        upload_to='community/attachments',
         blank=True,
         null=True,
         validators=[validate_file_size],
@@ -227,4 +226,18 @@ class Community(models.Model):
     # Optionally, you can add a method to get a short post
     def short_post(self):
         return self.post[:50] + '...' if len(self.post) > 50 else self.post
-        
+
+class Event(models.Model):
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)  # Link to the Teacher
+    event_post = models.TextField(help_text=_('Enter your event description here.'))
+    visibility = models.CharField(max_length=10, choices=[
+        ('public', 'Public'),
+        ('private', 'Private (Students Only)'),
+    ], default='public')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    image = models.ImageField(upload_to='event/images', blank=True, null=True, help_text=_('Upload an event image.'))
+    attachment = models.FileField(upload_to='event/attachments', blank=True, null=True, help_text=_('Upload an optional file.'))
+
+    def __str__(self):
+        return f"Event by {self.teacher} - {self.event_post[:20]}... on {self.created_at.strftime('%Y-%m-%d')}"

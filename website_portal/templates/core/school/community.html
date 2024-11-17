@@ -1,107 +1,86 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Community - IIHCollege</title>
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-    <!-- Unique Font -->
-      <style>
-      body {
-        background: #f0f4f8; /* Light background */
-        font-family: "Roboto", sans-serif; /* Unique font */
-      }
-      .hero {
-        background: #b80f3f;
-        color: #ffffff; /* White text */
-        padding: 100px 0;
-        text-align: center;
-        position: relative;
-      }
-      .hero h1 {
-        font-size: 3rem;
-      }
-      .hero p {
-        font-size: 1.5rem;
-      }
-      .community {
-        padding: 50px 0;
-      }
-      .feature {
-        background: #ffffff;
-        border-radius: 8px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
-        padding: 20px;
-      }
-      .feature h3 {
-        color: #333;
-      }
-      .footer {
-        background: #343a40; /* Dark background for footer */
-        color: #ffffff; /* White text */
-        padding: 20px 0;
-        text-align: center;
-      }
-      .footer a {
-        color: #ffffff; /* White links */
-      }
-      .footer a:hover {
-        text-decoration: underline; /* Underline on hover */
-      }
-      .logout-button {
-        background-color: #dc3545; /* Bootstrap danger color */
-        color: white;
-        border: none;
-        border-radius: 5px;
-        padding: 10px 15px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-      }
-      .logout-button:hover {
-        background-color: #b61f2e; /* Darker red on hover */
-      }
-      .community {
-        padding: 50px 0;
-      }
-      .feature {
-        margin-bottom: 30px;
-      }
-      .blog {
-        margin-top: 50px;
-      }
-      .posts {
-        margin-bottom: 30px;
-      }
-      .post {
-        border: 1px solid #ddd;
-        padding: 15px;
-        margin-bottom: 15px;
-        border-radius: 5px;
-      }
-      .comment-section {
-        margin-top: 30px;
-      }
-
-      .animate-on-scroll {
-        opacity: 0; /* Start hidden */
-        transform: translateY(50px); /* Start slightly below */
-        transition: opacity 0.5s ease, transform 0.5s ease; /* Smooth transition */
-      }
-
-      .animate-on-scroll.visible {
-        opacity: 1; /* Fade in */
-        transform: translateY(0); /* Move into position */
-      }
-      .preview {
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            background: #f0f4f8; /* Light background */
+            font-family: "Roboto", sans-serif; /* Unique font */
+        }
+        .hero {
+            background: #b80f3f;
+            color: #ffffff; /* White text */
+            padding: 100px 0;
+            text-align: center;
+            position: relative;
+        }
+        .hero h1 {
+            font-size: 3rem;
+        }
+        .hero p {
+            font-size: 1.5rem;
+        }
+        .community {
+            padding: 50px 0;
+        }
+        .feature {
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+        .feature h3 {
+            color: #333;
+        }
+        .footer {
+            background: #343a40; /* Dark background for footer */
+            color: #ffffff; /* White text */
+            padding: 20px 0;
+            text-align: center;
+        }
+        .footer a {
+            color: #ffffff; /* White links */
+        }
+        .footer a:hover {
+            text-decoration: underline; /* Underline on hover */
+        }
+        .logout-button {
+            background-color: #dc3545; /* Bootstrap danger color */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .logout-button:hover {
+            background-color: #b61f2e; /* Darker red on hover */
+        }
+        .post {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+        .comment-section {
+            margin-top: 30px;
+        }
+        .animate-on-scroll {
+            opacity: 0; /* Start hidden */
+            transform: translateY(50px); /* Start slightly below */
+            transition: opacity 0.5s ease, transform 0.5s ease; /* Smooth transition */
+        }
+        .animate-on-scroll.visible {
+            opacity: 1; /* Fade in */
+            transform: translateY(0); /* Move into position */
+        }
+        .preview {
             margin-top: 10px;
         }
         .preview img {
@@ -109,132 +88,126 @@
             height: auto;
         }
     </style>
-  </head>
-  <body>
+</head>
+<body>
     {% include 'support-files/header.html' %} <!-- Include the custom header here -->
 
-    {% if user.student %}
     <div class="hero shadow mb-5">
-        <h1 class="animate-on-scroll">Join the Student Community</h1>
-        <p class="animate-on-scroll">Connect with your peers, share experiences, and find support!</p>
-    </div>
-    {% elif user.teacher %}
-    <div class="hero shadow mb-5">
-        <h1 class="animate-on-scroll">Welcome to the Teachers Community</h1>
-        <p class="animate-on-scroll">Collaborate with fellow educators and share insights to enhance student learning!</p>
-    </div>  
-    {% else %}
-    <div class="hero shadow mb-5">
-        <h1 class="animate-on-scroll">Community Engagement</h1>
-        <p class="animate-on-scroll">Join us in creating a vibrant community where everyone can thrive!</p>
-    </div>
-    {% endif %}
-    
-
-      <h2 class="mb-4 text-center">
-        {% if user.teacher %}
-        Teacher Post
-        {% elif user.student %}
-        Student Community
+        {% if user.student %}
+            <h1 class="animate-on-scroll">Join the Student Community</h1>
+            <p class="animate-on-scroll">Connect with your peers, share experiences, and find support!</p>
+        {% elif user.teacher %}
+            <h1 class="animate-on-scroll">Welcome to the Teachers Community</h1>
+            <p class="animate-on-scroll">Collaborate with fellow educators and share insights to enhance student learning!</p>
         {% else %}
-        Community
+            <h1 class="animate-on-scroll">Community Engagement</h1>
+            <p class="animate-on-scroll">Join us in creating a vibrant community where everyone can thrive!</p>
         {% endif %}
-      </h2>
-<div class="container">
-  {% if user.teacher %}
-{% include 'support-files/post.html' %}
-<hr class="mt-4 mb-5">
-{% endif %}
+    </div>
+
+    <h2 class="mb-4 text-center">
+        {% if user.teacher %}
+            Teacher Post
+        {% elif user.student %}
+            Student Community
+        {% else %}
+            Community
+        {% endif %}
+    </h2>
+
+    <div class="container">
+        {% if user.teacher %}
+            {% include 'support-files/post-community.html' %}
+ <hr class="mt-4 mb-5">
+        {% endif %}
         <div id="community">
-        {% for community in community_entries %}
-            {% if community.visibility == "public" %}
-                <div id="post-{{ community.id }}" class="card mb-3">
-                    {% if community.image %}
-                        <img class="card-img-top" src="{{ community.image.url }}" alt="Post Image">
-                    {% endif %}
-                    {% if community.attachment %}
-                        <a class="card btn-light m-4 p-4" href="{{ community.attachment.url }}">Download Attachment</a>
-                    {% endif %}
-                    <div class="card-body">
-                      <small class="card-text">Visibility: {{ community.visibility }}</small>
-                        <h5 class="card-title">{{ community.teacher }}</h5>
-                        <p class="card-text">{{ community.post }}</p>
-                        <small class="card-text">Posted on: {{ community.created_at }}</small>
-                        <p>
-                            <button class="btn btn-secondary mt-4" type="button" data-toggle="collapse" data-target="#collapseExample-{{ community.id }}" aria-expanded="false" aria-controls="collapseExample">
-                                settings
-                            </button>
-                        </p>
-                        {% if user.teacher %}
-                        <div class="collapse" id="collapseExample-{{ community.id }}">
-                          <a class="btn btn-danger" href="{% url 'delete_community' community.id %}">Delete</a>
-                        </div>
+            {% for community in community_entries %}
+                {% if community.visibility == "public" %}
+                    <div id="post-{{ community.id }}" class="card mb-3">
+                        {% if community.image %}
+                            <img class="card-img-top" src="{{ community.image.url }}" alt="Post Image">
                         {% endif %}
-                    </div>
-                </div>
-            {% elif request.user.teacher == community.teacher or request.user.student %}
-                <div id="post-{{ community.id }}" class="card mb-3">
-                    {% if community.image %}
-                        <img class="card-img-top" src="{{ community.image.url }}" alt="Post Image">
-                    {% endif %}
-                    {% if community.attachment %}
-                        <a class="card btn-light m-4 p-4" href="{{ community.attachment.url }}">Download Attachment</a>
-                    {% endif %}
-                     <div class="card-body">
-                        <h5 class="card-title">{{ community.teacher }}</h5>
-                        <p class="card-text">{{ community.post }}</p>
-                        <small class="card-text">Visibility: {{ community.visibility }}</small>
-                        <br>
-                        <small class="card-text">Posted on: {{ community.created_at }}</small>
-                        <p>
-                            <button class="btn btn-secondary mt-4" type="button" data-toggle="collapse" data-target="#collapseExample-{{ community.id }}" aria-expanded="false" aria-controls="collapseExample">
-                                settings
-                            </button>
-                        </p>
-                        <div class="collapse" id="collapseExample-{{ community.id }}">
-                          <a class="btn btn-danger" href="{% url 'delete_community' community.id %}">Delete</a>
+                        {% if community.attachment %}
+                            <a class="card btn-light m-4 p-4" href="{{ community.attachment.url }}">{{ community.attachment }}</a>
+                        {% endif %}
+                        <div class="card-body">
+                            <small class="card-text">Visibility: {{ community.visibility }}</small>
+                            <h5 class="card-title">{{ community.teacher }}</h5>
+                            <p class="card-text">{{ community.post }}</p>
+                            <small class="card-text">Posted on: {{ community.created_at }}</small>
+                            <p>
+                                <button class="btn btn-secondary mt-4" type="button" data-toggle="collapse" data-target="#collapseExample-{{ community.id }}" aria-expanded="false" aria-controls="collapseExample">
+                                    settings
+                                </button>
+                            </p>
+                            {% if user.teacher %}
+                                <div class="collapse" id="collapseExample-{{ community.id }}">
+                                    <a class="btn btn-danger" href="{% url 'delete' community.id %}">Delete</a>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
-                </div>
-            {% endif %}
-        {% empty %}
-            <p>No posts yet.</p>
-        {% endfor %}
+                {% elif request.user.teacher == community.teacher or request.user.student %}
+                    <div id="post-{{ community.id }}" class="card mb-3">
+                        {% if community.image %}
+                            <img class="card-img-top" src="{{ community.image.url }}" alt="Post Image">
+                        {% endif %}
+                        {% if community.attachment %}
+                            <a class="card btn-light m-4 p-4" href="{{ community.attachment.url }}">{{ community.attachment }}</a>
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ community.teacher }}</h5>
+                            <p class="card-text">{{ community.post }}</p>
+                            <small class="card-text">Visibility: {{ community.visibility }}</small>
+                            <br>
+                            <small class="card-text">Posted on: {{ community.created_at }}</small>
+                            <p>
+                                <button class="btn btn-secondary mt-4" type="button" data-toggle="collapse" data-target="#collapseExample-{{ community.id }}" aria-expanded="false" aria-controls="collapseExample">
+                                    settings
+                                </button>
+                            </p>
+                            <div class="collapse" id="collapseExample-{{ community.id }}">
+                                <a class="btn btn-danger" href="{% url 'delete' community.id %}">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% empty %}
+                <p>No posts yet.</p>
+            {% endfor %}
         </div>
-  </div>
-{% include 'support-files/loader.html' %}
+    </div>
 
-{% include 'support-files/footer.html' %}
+    {% include 'support-files/loader.html' %}
+    {% include 'support-files/footer.html' %}
+    {% include 'support-files/logout-function.html' %}
 
-{% include 'support-files/logout-function.html' %}
-
-
-<script>
-      function previewImage(event) {
-        const previewContainer = document.getElementById('image-preview');
-        previewContainer.innerHTML = ''; // Clear previous previews
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = document.createElement('img');
-                img.src = e.target.result; // Set the image source to the file's data
-                previewContainer.appendChild(img); // Append the image to the preview container
-            };
-            reader.readAsDataURL(file); // Read the file as a data URL
+    <script>
+        function previewImage(event) {
+            const previewContainer = document.getElementById('image-preview');
+            previewContainer.innerHTML = ''; // Clear previous previews
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result; // Set the image source to the file's data
+                    previewContainer.appendChild(img); // Append the image to the preview container
+                };
+                reader.readAsDataURL(file); // Read the file as a data URL
+            }
         }
-    }
 
-    function previewAttachment(event) {
-        const previewContainer = document.getElementById('attachment-preview');
-        previewContainer.innerHTML = ''; // Clear previous previews
-        const file = event.target.files[0];
-        if (file) {
-            const fileInfo = document.createElement('p');
-            fileInfo.textContent = `Uploaded attachment: ${file.name}`; // Display the file name
-            previewContainer.appendChild(fileInfo); // Append the file info to the preview container
+        function previewAttachment(event) {
+            const previewContainer = document.getElementById('attachment-preview');
+            previewContainer.innerHTML = ''; // Clear previous previews
+            const file = event.target.files[0];
+            if (file) {
+                const fileInfo = document.createElement('p');
+                fileInfo.textContent = `Uploaded attachment: ${file.name}`; // Display the file name
+                previewContainer.appendChild(fileInfo); // Append the file info to the preview container
+            }
         }
-    }
     </script>
-  </body>
+</body>
 </html>
