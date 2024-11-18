@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'iihc_website_portal.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='postgresql://pixel:toIFm1zrixqy9qQPJ1RIbIj17YLKQ2cW@dpg-cstc6ft2ng1s73atdes0-a.singapore-postgres.render.com/database_40rj',
+        default='postgresql://pixel:VfJKqUY65kF9UkFrCXpTFi9sGevAmPdL@dpg-csteerl6l47c73ek31p0-a.singapore-postgres.render.com/portal_uxnh',
         conn_max_age=600
     )
 }
