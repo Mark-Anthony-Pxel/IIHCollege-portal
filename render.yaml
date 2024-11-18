@@ -10,7 +10,7 @@ services:
     name: iihc_database
     runtime: python
     buildCommand: "./build.sh"  # Ensure this script exists and is executable
-    startCommand: "python -m gunicorn iihc_website_portal.asgi:application -k uvicorn.workers.UvicornWorker"
+    startCommand: " "
 
     envVars:  # Environment variables for the web service
       - key: DATABASE_URL
