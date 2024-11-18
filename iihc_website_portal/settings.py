@@ -8,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-n&q%g+ju@we4a=v2+(cyl^%gc4m^x+(yg%c1c&_l&+qg1!p921'
 
 ALLOWED_HOSTS = [
-    'https://iih-college-portal.onrender.com',  
+    'iih-college-portal.onrender.com',  
     'localhost',                         
     '127.0.0.1',                          
 ]
@@ -76,11 +76,11 @@ WSGI_APPLICATION = 'iihc_website_portal.wsgi.application'
 
 ASGI_APPLICATION = "iihc_website_portal.asgi.application"
 
-# Security settings
-# SECURE_SSL_REDIRECT = True  # Redirect all HTTP requests to HTTPS
-# SECURE_HSTS_SECONDS = 3600  # Enable HTTP Strict Transport Security (HSTS)
-# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-# SECURE_HSTS_PRELOAD = True
+Security settings
+SECURE_SSL_REDIRECT = True  # Redirect all HTTP requests to HTTPS
+SECURE_HSTS_SECONDS = 3600  # Enable HTTP Strict Transport Security (HSTS)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -95,7 +95,7 @@ ASGI_APPLICATION = "iihc_website_portal.asgi.application"
 DATABASES = {
     'default': dj_database_url.config(
         # Replace this value with your local database's connection string.
-        default='postgresql://pxel:yYWsgntkKJ4v0qykPoGMMksGxYSplWtE@dpg-cspd4jbtq21c739ro8n0-a.oregon-postgres.render.com/',
+        default='postgresql://pixel:toIFm1zrixqy9qQPJ1RIbIj17YLKQ2cW@dpg-cstc6ft2ng1s73atdes0-a/database_40rj',
         # iihcdatabase
         conn_max_age=600
     )
@@ -141,7 +141,7 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Check if in DEBUG mode
-DEBUG = False  # Set this to False in production
+DEBUG = True  # Set this to False in production
 
 if not DEBUG:
     # Enable the WhiteNoise storage backend for serving static files in production
