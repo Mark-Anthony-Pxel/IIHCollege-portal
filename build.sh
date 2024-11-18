@@ -9,5 +9,4 @@ pip install -r requirements.txt
 python manage.py collectstatic --no-input
 
 # Apply any outstanding database migrations
-python -m gunicorn iihc_website_portal.asgi:django_asgi_app -k uvicorn.workers.UvicornWorker
-#  -k uvicorn.workers.UvicornWorker
+python manage.py migrate

@@ -2,14 +2,16 @@ from pathlib import Path
 import dj_database_url
 from django.contrib.messages import constants as message_constants
 import os
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-n&q%g+ju@we4a=v2+(cyl^%gc4m^x+(yg%c1c&_l&+qg1!p921'
+# SECRET_KEY = 'django-insecure-n&q%g+ju@we4a=v2+(cyl^%gc4m^x+(yg%c1c&_l&+qg1!p921'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DATABASE_URL = os.environ.get('DATABASE_URL')
+SECRET_KEY = os.environ.get('SECRET_KEY', 'your-default-secret-key')
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+
 
 ALLOWED_HOSTS = [
     'https://iihcollege-nv51.onrender.com',  
@@ -80,25 +82,30 @@ WSGI_APPLICATION = 'iihc_website_portal.wsgi.application'
 
 ASGI_APPLICATION = "iihc_website_portal.asgi.application"
 
+# Security settings
+SECURE_SSL_REDIRECT = True  # Redirect all HTTP requests to HTTPS
+SECURE_HSTS_SECONDS = 3600  # Enable HTTP Strict Transport Security (HSTS)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
-
 # DATABASES = {
-#     'default': dj_database_url.config(
-#         # Replace this value with your local database's connection string.
-#         default='postgresql://pxel:yYWsgntkKJ4v0qykPoGMMksGxYSplWtE@dpg-cspd4jbtq21c739ro8n0-a.oregon-postgres.render.com/',
-#         # iihcdatabase
-#         conn_max_age=600
-#     )
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
 # }
+
+DATABASES = {
+    'default': dj_database_url.config(
+        # Replace this value with your local database's connection string.
+        default='postgresql://pxel:yYWsgntkKJ4v0qykPoGMMksGxYSplWtE@dpg-cspd4jbtq21c739ro8n0-a.oregon-postgres.render.com/',
+        # iihcdatabase
+        conn_max_age=600
+    )
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -140,7 +147,7 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Check if in DEBUG mode
-DEBUG = True  # Set this to False in production
+DEBUG = False  # Set this to False in production
 
 if not DEBUG:
     # Enable the WhiteNoise storage backend for serving static files in production

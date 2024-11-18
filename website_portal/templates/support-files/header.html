@@ -13,7 +13,10 @@
         </li>
         {% if not user.is_authenticated %}
         <li class="nav-item">
-            <a class="nav-link" href="{% url 'enroll' %}">Enroll Now</a>
+            <a class="nav-link" href="{% url 'enroll' %}">Enroll</a>
+        </li>        
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'survey' %}">Survey</a>
         </li>        
         <li class="nav-item">
             <a class="nav-link" href="{% url 'courses' %}">Courses</a>
@@ -37,7 +40,7 @@
     <div class="nav-link ml-2">|</div>
 </li>
 <li class="nav-item">
-    <a class="nav-link" href="{% url 'teacher' %}">Register a teacher</a>
+    <a class="nav-link" href="{% url 'teacher_register' %}">Register a teacher</a>
 </li>
 <li class="nav-item">
     <a class="nav-link" href="{% url 'teacher_list' %}">Teacher List</a>
@@ -53,7 +56,11 @@
     <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" href="{% url 'grading' %}">Grading</a>
+{% if student.id %}
+    <a class="nav-link" href="{% url 'grading' student.id %}">Grading</a>
+{% else %}
+    <span class="nav-link disabled">Grading (not available)</span>
+{% endif %}
 </li>
 <li class="nav-item">
     <a class="nav-link" href="{% url 'lesson' %}">Lesson</a>

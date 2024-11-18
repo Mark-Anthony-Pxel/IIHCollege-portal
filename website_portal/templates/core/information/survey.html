@@ -1,0 +1,116 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% if user.is_superuser %}
+            Admin | Homepage
+        {% elif user.is_authenticated %}
+            {% if user.teacher %}
+                Teacher | Homepage
+            {% elif user.student %}
+                Student | Homepage
+            {% endif %}
+        {% else %}
+            IIHC Portal
+        {% endif %}
+    </title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="{% static 'website_portal/image/logo2.png' %}" type="image/x-icon">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+        div.hero2 {
+            padding: 35svh 0;
+        }
+        .hero, .hero2 {
+            background: #b80f3f;    
+            color: #ffffff; 
+            text-align: center;
+            position: relative;
+        }
+        .hero {
+            padding: 100px 0;
+        }
+        .hero h1 {
+            font-size: 3rem;
+        }
+        .hero p {
+            font-size: 1.5rem;
+        }
+        .features {
+            padding: 50px 0;
+        }
+        .footer {
+            background: #343a40; 
+            color: #ffffff; 
+            padding: 20px 0;
+            text-align: center;
+        }
+        .footer a {
+            color: #ffffff; 
+        }
+        .footer a:hover {
+            text-decoration: underline; 
+        }
+        .shadow {
+            box-shadow: 3px 3px 10px 3px #dddddd;
+        }
+        .testimonials {
+            position: relative;
+            overflow: hidden;
+            height: 200px; 
+        }
+        .animate-on-scroll {
+            opacity: 0; /* Start hidden */
+            transform: translateY(50px); /* Start slightly below */
+            transition: opacity 1s ease, transform 0.5s ease; /* Smooth transition */
+        }
+        .animate-on-scroll.visible {
+            opacity: 1; /* Fade in */
+            transform: translateY(0); /* Move into position */
+        }
+        .logout-button {
+            background-color: #dc3545; /* Bootstrap danger color */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .logout-button:hover {
+            background-color: #b61f2e; /* Darker red on hover */
+        }
+    </style>
+</head>
+<body>
+    <!-- header -->
+    {% include 'support-files/header.html' %}
+
+    <div class="hero mb-5">
+        <h1>Survey</h1>
+        <p class="hero2">
+            Your survey will help us improve our application, thank you for your time! :)
+        </p>
+    </div>
+
+        <iframe class="card container" src="https://docs.google.com/forms/d/e/1FAIpQLSexe3aGAI5MAs-bvT1CBdMW9-mbBq9DJ3O3GYVbLvrFoa5KvA/viewform?embedded=true" width="540" height="5650" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+    
+    <footer class="footer">
+        <div class="container">
+            <p class="text-muted">© 2024 IIHCollege. All rights reserved.</p>
+            <p class="text-muted">
+                <a href="{% url 'privacy_policy' %}" class="text-white">Privacy Policy</a> |
+                <a href="{% url 'terms_of_service' %}" class="text-white">Terms of Service</a>
+            </p>
+        </div>
+    </footer>
+
+    {% include 'support-files/logout-function.html' %}
+</body>
+</html>

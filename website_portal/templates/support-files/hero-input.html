@@ -22,11 +22,15 @@
     <a href="{% url 'event' %}" class="m-2 btn btn-light btn-lg shadow animate-on-scroll">Event</a>
     <a href="{% url 'community' %}" class="m-2 btn btn-light btn-lg shadow animate-on-scroll">Community</a>
     <a href="{% url 'contact' %}" class="m-2 btn btn-light btn-lg shadow animate-on-scroll">Contact</a>
-    <a href="{% url 'grading' %}" class="m-2 btn btn-light btn-lg shadow animate-on-scroll">Grading</a>
     <a href="{% url 'subject' %}" class="m-2 btn btn-light btn-lg shadow animate-on-scroll">Subject</a>
     <a href="{% url 'lesson' %}" class="m-2 btn btn-light btn-lg shadow animate-on-scroll">Lesson</a>
+    {% if student.id %}
+    <a href="{% url 'grading' %}" class="m-2 btn btn-light btn-lg shadow animate-on-scroll">Grading</a>
+    {% else %}
+    <span class="nav-link disabled m-2 btn btn-light btn-lg shadow animate-on-scroll">Grading (not available)</span>
+    {% endif %}
     {% elif user.is_superuser %}
-    <a href="{% url 'teacher' %}" class="btn btn-light btn-lg shadow animate-on-scroll m-2">Register a teacher</a>
+    <a href="{% url 'teacher_register' %}" class="btn btn-light btn-lg shadow animate-on-scroll m-2">Register a teacher</a>
     <a href="{% url 'admin:index' %}" class="btn btn-light btn-lg shadow animate-on-scroll m-2">System</a>
     {% endif %}
 </div>
@@ -36,6 +40,8 @@
     <p class="animate-on-scroll">Your journey to learning starts here!</p>
     
     <a href="{% url 'enroll' %}" class="m-2 btn btn-light btn-lg shadow animate-on-scroll">Enroll Now!</a>
+    <a href="{% url 'survey' %}" class="m-2 btn btn-light btn-lg shadow animate-on-scroll">Survey!</a>
+
 </div>
 {% endif %}
 </div>

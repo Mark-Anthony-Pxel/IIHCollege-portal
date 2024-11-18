@@ -142,7 +142,7 @@
                             </p>
                             {% if user.teacher %}
                                 <div class="collapse" id="collapseExample-{{ community.id }}">
-                                    <a class="btn btn-danger" href="{% url 'delete' community.id %}">Delete</a>
+                                    <a class="btn btn-danger" href="{% url 'delete_community' community.id %}">Delete</a>
                                 </div>
                             {% endif %}
                         </div>

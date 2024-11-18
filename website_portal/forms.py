@@ -2,7 +2,7 @@ from django import forms
 from django.core.validators import validate_email, RegexValidator
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
-from .models import Student, Message, Teacher, Community
+from .models import Student, Message, Teacher, Community, Event
 from django.contrib.auth.models import User
 
 class EnrollForm(forms.ModelForm):
@@ -123,7 +123,8 @@ class EnrollForm(forms.ModelForm):
             ('HE - Tourism', _('HE - Tourism')),
             ('ICT', _('ICT')),
         ], 
-        label=_('Specifics')
+        label=_('Specifics'),
+        required=False 
     )
     branch = forms.ChoiceField(
         choices=[
@@ -200,13 +201,9 @@ class EnrollForm(forms.ModelForm):
         password = self.cleaned_data['password']
         if len(password) < 8:
             raise ValidationError(_('Password must be at least 8 characters long.'))
-        # if not any(char.isdigit() for char in password):
-        #     raise ValidationError(_('Password must contain at least one digit.'))
-        # if not any(char in "!@#$%^&*()_+-=~`" for char in password):
-        #     raise ValidationError(_('Password must contain at least one special character.'))
         return password
 
-    def clean_password_confirm (self):
+    def clean_password_confirm(self):
         password = self.cleaned_data.get('password')
         password_confirm = self.cleaned_data.get('password_confirm')
         if password and password_confirm and password != password_confirm:
@@ -226,9 +223,6 @@ class EnrollForm(forms.ModelForm):
         
         emergency_contact_phone = self.cleaned_data['emergency_contact_phone']
         return self.validate_phone_number(emergency_contact_phone)
-
-from django import forms
-from .models import Message
 
 class MessageForm(forms.ModelForm):
     class Meta:
@@ -289,13 +283,20 @@ class CommunityForm(forms.ModelForm):
     class Meta:
         model = Community
         fields = ['comment', 'image', 'attachment']
-        widgets = {
-            'comment': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Enter your comment here...'}),
-            'image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
-            'attachment': forms.ClearableFileInput(attrs={'class': 'form-control'}),
-        }
         labels = {
             'comment': 'Comment',
             'image': 'Image',
             'attachment': 'Attachment',
+        }
+
+class EventForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = ['title','teacher', 'event_post', 'visibility', 'image', 'attachment']
+        help_texts = {
+            'title': 'Enter your title here',
+            'event_post': 'Enter your event description here.',
+            'visibility': 'Select the visibility of the event.',
+            'image': 'Upload an event image.',
+            'attachment': 'Upload an optional file.',
         }

@@ -2,11 +2,12 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
-from django.contrib.auth import get_user_model
 import uuid
-from datetime import date
-from django.core.exceptions import ValidationError
+# from django.contrib.auth import get_user_model
+# from datetime import date
+# from django.core.exceptions import ValidationError
 from .validators import validate_image_size, validate_file_size
+
 
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='student')
@@ -19,12 +20,12 @@ class Student(models.Model):
     phone = models.CharField(max_length=13, verbose_name=_('Phone Number'))
     email = models.EmailField(unique=True, verbose_name=_('Email'))
     password = models.CharField(max_length=128, verbose_name=_('Password'))  # Store hashed password
-        # Emergency contact fields 'optional'
-    emergency_contact_name = models.CharField(max_length=100, null=True, blank=True)
-    emergency_contact_phone = models.CharField(max_length=15, null=True, blank=True)
-    emergency_contact_relationship = models.CharField(max_length=50, null=True, blank=True)
-    emergency_contact_email = models.EmailField(null=True, blank=True)
 
+    # Emergency contact fields 'optional'
+    emergency_contact_name = models.CharField(max_length=100, blank=True)  # Removed null=True
+    emergency_contact_phone = models.CharField(max_length=15, blank=True)  # Removed null=True
+    emergency_contact_relationship = models.CharField(max_length=50, blank=True)  # Removed null=True
+    emergency_contact_email = models.EmailField(blank=True)  # Removed null=True
 
     SEX_CHOICES = [
         ('Male', _('Male')),
@@ -34,7 +35,7 @@ class Student(models.Model):
     sex = models.CharField(max_length=6, choices=SEX_CHOICES, verbose_name=_('Sex'))
     mother_tongue = models.CharField(max_length=30, verbose_name=_('Mother Tongue'))
     religion = models.CharField(max_length=30, verbose_name=_('Religion'))
-    
+
     LEARNING_MODE_CHOICES = [
         ('Modular', _('Modular')),
         ('Face to face', _('Face to Face')),
@@ -42,14 +43,14 @@ class Student(models.Model):
         ('Hybrid', _('Hybrid')),
     ]
     learning_mode = models.CharField(max_length=15, choices=LEARNING_MODE_CHOICES, verbose_name=_('Learning Mode'))
-    
+
     PAYMENT_METHOD_CHOICES = [
         ('Cash', _('Cash')),
         ('Bank Transfer', _('Bank Transfer')),
         ('Mobile Wallet', _('Mobile Wallet')),
     ]
     payment_method = models.CharField(max_length=15, choices=PAYMENT_METHOD_CHOICES, verbose_name=_('Payment Method'))
-    
+
     STRAND_CHOICES = [
         ('STEM', _('STEM')),
         ('ABM', _('ABM')),
@@ -63,8 +64,8 @@ class Student(models.Model):
         ('HE - Cookery', _('HE - Cookery')),
         ('HE - Tourism', _('HE - Tourism')),
         ('ICT', _('ICT')),
-    ]    
-    tvl_specifics = models.CharField(max_length=15, choices=TVL_SPECIFICS, blank=True, null=True, verbose_name=('Specifics'))
+    ]
+    tvl_specifics = models.CharField(max_length=15, choices=TVL_SPECIFICS, blank=True, verbose_name=_('Specifics'))  # Removed null=True
 
     BRANCH_CHOICES = [
         ('La Forteza Campus', _('IIH COLLEGE - La Forteza Campus')),
@@ -88,11 +89,11 @@ class Student(models.Model):
 
     def save(self, *args, **kwargs):
         if self.password:
-            self.password = make_password(self.password)  # Hash the password
+            self.password = make_password(self.password) # Hash the password
         if not self.user_id:  # Check if user_id is not set
             raise ValueError("User  must be assigned before saving the Student instance.")
         super().save(*args, **kwargs)
-  
+
 class Message(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     message = models.TextField()
@@ -102,7 +103,6 @@ class Message(models.Model):
     # Optional fields
     image = models.ImageField(
         blank=True,
-        null=True,
         upload_to='message/',
         validators=[validate_image_size],
         help_text=_('Upload an image (optional, max 5MB).')
@@ -110,7 +110,6 @@ class Message(models.Model):
     attachment = models.FileField(
         upload_to='message-attachments/',
         blank=True,
-        null=True,
         validators=[validate_file_size],
         help_text=_('Upload an optional file (max 10MB).')
     )
@@ -124,12 +123,12 @@ class Message(models.Model):
         return f"Message from {self.student} - {self.message[:20]}..."  # Display first 20 characters of the message
 
 class Teacher(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='teacher', null=True, blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='teacher', blank=True)  # Removed null=True
     subject = models.CharField(max_length=50)
     password = models.CharField(max_length=128, blank=True)  # Store hashed password
-    email = models.EmailField(unique=True, blank=True, null=True, verbose_name=_('Email'))
-    first_name = models.CharField(max_length=20, blank=True, null=True, verbose_name=_('First Name'))
-    last_name = models.CharField(max_length=20, blank=True, null=True, verbose_name=_('Last Name'))
+    email = models.EmailField(unique=True, blank=True, verbose_name=_('Email'))  # Removed null=True
+    first_name = models.CharField(max_length=20, blank=True, verbose_name=_('First Name'))  # Removed null=True
+    last_name = models.CharField(max_length=20, blank=True, verbose_name=_('Last Name'))  # Removed null=True
 
     STRANDS = [
         ('STEM', _('STEM')),
@@ -145,7 +144,7 @@ class Teacher(models.Model):
         ('HE - Tourism', _('HE - Tourism')),
         ('ICT', _('ICT')),
     ]    
-    tvl_options = models.CharField(max_length=15, choices=TVL_OPTIONS, blank=True, null=True, verbose_name=_('Teacher TVL'))
+    tvl_options = models.CharField(max_length=15, choices=TVL_OPTIONS, blank=True, verbose_name=_('Teacher TVL'))  # Removed null=True
 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))
@@ -162,16 +161,10 @@ class Teacher(models.Model):
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name} - {self.subject}"
 
-class Subject(models.Model):
-    name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.name
-
 class Community(models.Model):
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
-    post = models.TextField(null=True, help_text=_('Enter your post here.'))  # Add default here
-    comment = models.TextField(help_text=_('Enter your comment here.'), blank=True, null=True)
+    post = models.TextField(help_text=_('Enter your post here.'))  # Add default here
+    comment = models.TextField(help_text=_('Enter your comment here.'), blank=True)  # Removed null=True
 
     VISIBILITY_CHOICES = [
         ('public', 'Public'),
@@ -182,7 +175,6 @@ class Community(models.Model):
     image = models.ImageField(
         upload_to='community/images',
         blank=True,
-        null=True,
         validators=[validate_image_size],
         help_text=_('Upload an image (max 5MB).')
     )
@@ -191,7 +183,6 @@ class Community(models.Model):
     attachment = models.FileField(
         upload_to='community/attachments',
         blank=True,
-        null=True,
         validators=[validate_file_size],
         help_text=_('Upload an optional file (max 10MB).')
     )
@@ -203,7 +194,7 @@ class Community(models.Model):
         if self.visibility == 'public':
             return True
         elif self.visibility == 'private':
-            return self.user == user  # Assuming you have a user field in your model
+            return self.teacher.user == user  # Assuming you have a user field in your model
         return False
 
     def get_visible_content(self, user):
@@ -211,7 +202,7 @@ class Community(models.Model):
         Return the content of the document if visible; otherwise, return a message.
         """
         if self.is_visible_to(user):
-            return self.content
+            return self.post
         else:
             return "This document is private and cannot be viewed."
 
@@ -229,6 +220,7 @@ class Community(models.Model):
 
 class Event(models.Model):
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)  # Link to the Teacher
+    title = models.CharField(max_length=60, default='IIH College')
     event_post = models.TextField(help_text=_('Enter your event description here.'))
     visibility = models.CharField(max_length=10, choices=[
         ('public', 'Public'),
@@ -236,8 +228,8 @@ class Event(models.Model):
     ], default='public')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    image = models.ImageField(upload_to='event/images', blank=True, null=True, help_text=_('Upload an event image.'))
-    attachment = models.FileField(upload_to='event/attachments', blank=True, null=True, help_text=_('Upload an optional file.'))
+    image = models.ImageField(upload_to='event/images', blank=True, help_text=_('Upload an event image.'))
+    attachment = models.FileField(upload_to='event/attachments', blank=True, help_text=_('Upload an optional file.'))
 
     def __str__(self):
         return f"Event by {self.teacher} - {self.event_post[:20]}... on {self.created_at.strftime('%Y-%m-%d')}"
