@@ -13,7 +13,7 @@ python manage.py collectstatic --no-input
 
 # Create a superuser
 echo "Creating a superuser..."
-USERNAME="pixel"
+USERNAME="admin"
 EMAIL="pixelmain13@gmail.com"
 PASSWORD="Pixel!@#$%12345"
 
