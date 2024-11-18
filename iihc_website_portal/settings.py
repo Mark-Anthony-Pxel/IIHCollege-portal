@@ -1,11 +1,13 @@
 from pathlib import Path
-import dj_database_url
 from django.contrib.messages import constants as message_constants
+import dj_database_url
 import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-n&q%g+ju@we4a=v2+(cyl^%gc4m^x+(yg%c1c&_l&+qg1!p921'
+SECRET_KEY = 'django-insecure-oa$q=rp#()uold@!7jjw*1@aa$(qx3!a1gn3p+38!3cvc!m586'
+
+DEBUG = True  # Set this to False in production
 
 ALLOWED_HOSTS = [
     'iih-college-portal.onrender.com',  
@@ -21,16 +23,13 @@ MESSAGE_TAGS = {
     message_constants.ERROR: "alert alert-danger",
 }
 
-# backend-email
+# Authentication Backends
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'website_portal.backends.EmailBackend',
-    # 'website_portal.backends.TeacherBackend',
 ]
 
-
 # Application definition
-
 INSTALLED_APPS = [
     'rest_framework',
     'daphne',
@@ -72,102 +71,42 @@ TEMPLATES = [
     },
 ]
 
+ASGI_APPLICATION = 'iihc_website_portal.asgi.application'
+
 WSGI_APPLICATION = 'iihc_website_portal.wsgi.application'
 
-ASGI_APPLICATION = "iihc_website_portal.asgi.application"
-
-Security settings
-SECURE_SSL_REDIRECT = True  # Redirect all HTTP requests to HTTPS
-SECURE_HSTS_SECONDS = 3600  # Enable HTTP Strict Transport Security (HSTS)
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
-
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 
 DATABASES = {
     'default': dj_database_url.config(
-        # Replace this value with your local database's connection string.
-        default='postgresql://pixel:toIFm1zrixqy9qQPJ1RIbIj17YLKQ2cW@dpg-cstc6ft2ng1s73atdes0-a/database_40rj',
-        # iihcdatabase
+        default='postgresql://pixel:toIFm1zrixqy9qQPJ1RIbIj17YLKQ2cW@dpg-cstc6ft2ng1s73atdes0-a.singapore-postgres.render.com/database_40rj',
         conn_max_age=600
     )
 }
 
-# Password validation
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-
-# Internationalization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
-
-# This is where static files will be collected
-STATIC_ROOT = BASE_DIR / 'staticfiles'  # Using the '/' operator to join paths
-
-STATICFILES_DIRS = [
-    BASE_DIR / 'static',  # Adjust this path as needed
-]
-
-# Default primary key field type
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# Check if in DEBUG mode
-DEBUG = True  # Set this to False in production
-
-if not DEBUG:
-    # Enable the WhiteNoise storage backend for serving static files in production
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-# CACHES = {
-#     'default': {
-#         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-#         'LOCATION': 'redis://127.0.0.1:6379/1',  # Redis server location
-#         'OPTIONS': {
-#             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-#         }
-#     },
-#     'secondary': {
-#         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-#         'LOCATION': '/var/tmp/django_cache',  # Path for file-based cache
-#     }
-# }
-
-DATE_INPUT_FORMATS = [
-    '%m/%d/%y',   # MM/DD/YY
-    '%Y-%m-%d',   # YYYY-MM-DD
-    '%d/%m/%Y',   # DD/MM/YYYY
-    '%d-%m-%Y',   # DD-MM-YYYY
-    '%m-%d-%Y',   # MM-DD-YYYY
-]
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [BASE_DIR / 'static']
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media' 
+MEDIA_ROOT = BASE_DIR / 'media'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+if not DEBUG:
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+DATE_INPUT_FORMATS = [
+    '%m/%d/%y', '%Y-%m-%d', '%d/%m/%Y', '%d-%m-%Y', '%m-%d-%Y',
+]
