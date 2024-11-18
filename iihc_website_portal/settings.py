@@ -14,7 +14,7 @@ DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 
 ALLOWED_HOSTS = [
-    'https://iihcollege-nv51.onrender.com',  
+    'https://iih-college-portal.onrender.com',  
     'localhost',                         
     '127.0.0.1',                          
 ]
