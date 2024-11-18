@@ -94,7 +94,75 @@
 
     <div class="container">
         {% if user.teacher %}
-            {% include 'support-files/post-event.html' %}    
+            <div class="container mt-5">
+                <h1 class="mb-4">Create Event</h1>
+                <form class="bg-light p-3 mb-5" method="POST" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  <div class="form-group">
+                    <label for="visibility">Select Visibility</label>
+                    <select class="form-control" id="visibility" name="visibility">
+                      <option value="Public">Public</option>
+                      <option value="Private">Private</option>
+                    </select>
+                  </div>
+                  <div class="form-group hidden">
+                    <label hidden for="teacher">Teacher</label>
+                    <input hidden type="text" class="form-control" id="teacher" name="teacher" value="{{ user.first_name|capfirst }} {{ user.last_name|capfirst }}" readonly>
+                  </div>
+                  <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" class="form-control" id="title" name="title" placeholder="Enter title">
+                  </div>
+                  <div class="form-group">
+                    <label for="post">Event Description</label>
+                    <textarea class="form-control" id="post" name="event _post" rows="3" placeholder="Enter event description"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label for="images">Images</label>
+                    <input type="file" class="btn btn-outline-secondary form-control-file" id="images" 
+                           name="image" accept="image/*" multiple onchange="previewImages(event)">
+                    <div class="preview" id="image-preview"></div>
+                  </div>
+                  <div class="form-group">
+                    <label for="attachment">Attachment</label>
+                    <input type="file" class="btn btn-outline-secondary form-control-file" id="attachment" 
+                           name="attachment" onchange="previewAttachment(event)">
+                    <div class="preview" id="attachment-preview"></div>
+                  </div>
+                  <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+                </form>
+              </div>
+              <script>
+                function previewImages(event) {
+                    const previewContainer = document.getElementById('image-preview');
+                    previewContainer.innerHTML = ''; // Clear previous previews
+                    const files = event.target.files;
+            
+                    for (let i = 0; i < files.length; i++) {
+                        const file = files[i];
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.style.maxWidth = '80%';
+                            img.style.margin = '10px';
+                            previewContainer.appendChild(img);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                }
+            
+                function previewAttachment(event) {
+                    const previewContainer = document.getElementById('attachment-preview');
+                    previewContainer.innerHTML = ''; // Clear previous previews
+                    const file = event.target.files[0];
+                    if (file) {
+                        const fileInfo = document.createElement('p');
+                        fileInfo.textContent = `Uploaded attachment: ${file.name}`; // Display the file name
+                        previewContainer.appendChild(fileInfo); // Append the file info to the preview container
+                    }
+                }
+              </script>
         {% endif %}
 
         <div id="event">
@@ -110,22 +178,23 @@
                             {% endif %}
                             <div class="card-body">
                                 <small class="card-text">Visibility: {{ event.visibility }}</small>
-                                <h5 class="card-title">{{ event.teacher }}</h5>
-                                <p class="card-text">{{ event.post }}</p>
+                                <h5 class="card-title" hidden>{{ event.teacher }}</h5>
+                                <h5 class="card-title">{{ event.title }}</h5>
+                                <p class="card-text">{{ event.event_post }}</p>
                                 <small class="card-text">Posted on: {{ event.created_at }}</small>
                                 <p>
-                                    <button class="btn btn-secondary mt-4" type="button" data-toggle="collapse" data-target="#collapseExample- {{ event.id }}" aria-expanded="false" aria-controls="collapseExample">
+                                    <button class="btn btn-secondary mt-4" type="button" data-toggle="collapse" data-target="#collapseExample-{{ event.id }}" aria-expanded="false" aria-controls="collapseExample">
                                         settings
                                     </button>
                                 </p>
                                 {% if user.teacher %}
                                     <div class="collapse" id="collapseExample-{{ event.id }}">
-                                        <a class="btn btn-danger" href="{% url 'delete' event.id %}">Delete</a>
+                                        <a class="btn btn-danger" href="{% url 'delete_event' event.id %}">Delete</a>
                                     </div>
                                 {% endif %}
                             </div>
                         </div>
-                    {% elif request.user.teacher == event.teacher or request.user.student %}
+                    {% elif request.user.teacher == user.teacher or request.user.student %}
                         <div id="post-{{ event.id }}" class="card mb-3">
                             {% if event.image %}
                                 <img class="card-img-top" src="{{ event.image.url }}" alt="Post Image">
@@ -135,7 +204,8 @@
                             {% endif %}
                             <div class="card-body">
                                 <h5 class="card-title">{{ event.teacher }}</h5>
-                                <p class="card-text">{{ event.post }}</p>
+                                <h5 class="card-title">{{ event.title }}</h5>
+                                <p class="card-text">{{ event.event_post }}</p>
                                 <small class="card-text">Visibility: {{ event.visibility }}</small>
                                 <br>
                                 <small class="card-text">Posted on: {{ event.created_at }}</small>
@@ -162,6 +232,7 @@
     {% include 'support-files/loader.html' %}
     {% include 'support-files/footer.html' %}
     {% include 'support-files/logout-function.html' %}
+
 
     <script>
         function initScrollAnimation(selector) {

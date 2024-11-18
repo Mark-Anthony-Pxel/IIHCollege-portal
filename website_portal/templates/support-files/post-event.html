@@ -1,71 +1,8 @@
-{% block content %}
-<div class="container">
-    <h2 class="mt-4">Create Event</h2>
-    <form class="bg-light p-3 mt-4" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        
-        <div class="form-group">
-            <label class="form-label" for="visibility">Select Visibility</label>
-            <select class="form-control" id="visibility" name="visibility" required>
-                <option value="public">Public</option>
-                <option value="private">Private (Students Only)</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="title">Title</label>
-            <input type="text" class="form-control" id="title" name="title" required>
-        </div>
-
-        <div class="form-group">
-            <label for="post">Post</label>
-            <textarea class="form-control" id="post" name="post" rows="4" 
-                      placeholder="Enter your post here..." required></textarea>
-        </div>
-
-        <div class="form-group">
-            <label for="images">Images</label>
-            <input type="file" class="btn btn-outline-secondary form-control-file" id="images" 
-                   name="image" accept="image/*" multiple onchange="previewImages(event)">
-            <div class="preview" id="image-preview"></div>
-        </div>
-
-        <div class="form-group">
-            <label for="attachment">Attachment</label>
-            <input type="file" class="btn btn-outline-secondary form-control-file" id="attachment" 
-                   name="attachment" onchange="previewAttachment(event)">
-            <div class="preview" id="attachment-preview"></div>
-        </div>
-
-        <button type="submit" class="btn btn-primary btn-lg">Submit</button>
-    </form>
-</div>
-
-<script>
-        function previewImage(event) {
-            const previewContainer = document.getElementById('image-preview');
-            previewContainer.innerHTML = ''; // Clear previous previews
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = document.createElement('img');
-                    img.src = e.target.result; // Set the image source to the file's data
-                    previewContainer.appendChild(img); // Append the image to the preview container
-                };
-                reader.readAsDataURL(file); // Read the file as a data URL
-            }
-        }
-
-        function previewAttachment(event) {
-            const previewContainer = document.getElementById('attachment-preview');
-            previewContainer.innerHTML = ''; // Clear previous previews
-            const file = event.target.files[0];
-            if (file) {
-                const fileInfo = document.createElement('p');
-                fileInfo.textContent = `Uploaded attachment: ${file.name}`; // Display the file name
-                previewContainer.appendChild(fileInfo); // Append the file info to the preview container
-            }
-        }
-</script>
-{% endblock %}
+<style>
+    .preview img {
+      max-width: 80%;
+      margin: 10px;
+    }
+  </style>
+</head>
+<body>

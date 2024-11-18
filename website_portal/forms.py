@@ -282,8 +282,9 @@ class TeacherForm(forms.ModelForm):
 class CommunityForm(forms.ModelForm):
     class Meta:
         model = Community
-        fields = ['comment', 'image', 'attachment']
+        fields = ['comment', 'image', 'post', 'attachment']
         labels = {
+            'post': 'Post',
             'comment': 'Comment',
             'image': 'Image',
             'attachment': 'Attachment',
@@ -292,7 +293,7 @@ class CommunityForm(forms.ModelForm):
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event
-        fields = ['title','teacher', 'event_post', 'visibility', 'image', 'attachment']
+        fields = ['title', 'event_post', 'visibility', 'image', 'attachment']
         help_texts = {
             'title': 'Enter your title here',
             'event_post': 'Enter your event description here.',

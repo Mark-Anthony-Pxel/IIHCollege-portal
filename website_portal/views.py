@@ -45,7 +45,7 @@ def event(request):
         form = EventForm(request.POST, request.FILES)
         if form.is_valid():
             event = form.save(commit=False)
-            event.teacher = request.user.teacher  # Assuming the user is a teacher
+            event.teacher = request.user.teacher
             event.save()
             messages.success(request, 'Event created successfully!')
             return redirect('event')  # Redirect to an event list or detail view
@@ -54,9 +54,9 @@ def event(request):
     else:
         form = EventForm()
 
-    event = Event.objects.all()
-    return render(request, 'core/school/event.html', {'form': form}, {'event': event})
-
+    events = Event.objects.all()  # Fetch all events
+    return render(request, 'core/school/event.html', {'form': form, 'events': events})
+    
 def courses(request):
     """Render courses page."""
     return render(request, 'core/school/courses.html')
@@ -284,6 +284,15 @@ def delete_community(request, community_id):
         messages.success(request, 'Community post deleted successfully!')
         return redirect('community')
     return render(request, 'core/edit-delete/delete-post.html', {'community': community})
+
+def delete_event(request, event_id):
+    """Delete a community post."""
+    event = get_object_or_404(Event, id=event_id)
+    if request.method == 'POST':
+        event.delete()
+        messages.success(request, 'Event post deleted successfully!')
+        return redirect('event')
+    return render(request, 'core/edit-delete/delete-event.html', {'event': event})
 
 def add_subject(request):
     """Add a new subject."""

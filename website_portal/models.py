@@ -3,9 +3,9 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 import uuid
-# from django.contrib.auth import get_user_model
-# from datetime import date
-# from django.core.exceptions import ValidationError
+from django.contrib.auth import get_user_model
+from datetime import date
+from django.core.exceptions import ValidationError
 from .validators import validate_image_size, validate_file_size
 
 
@@ -222,14 +222,46 @@ class Event(models.Model):
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)  # Link to the Teacher
     title = models.CharField(max_length=60, default='IIH College')
     event_post = models.TextField(help_text=_('Enter your event description here.'))
-    visibility = models.CharField(max_length=10, choices=[
+    
+    VISIBILITY_CHOICES = [
         ('public', 'Public'),
         ('private', 'Private (Students Only)'),
-    ], default='public')
+    ]
+    visibility = models.CharField(max_length=10, choices=VISIBILITY_CHOICES, default='public')
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     image = models.ImageField(upload_to='event/images', blank=True, help_text=_('Upload an event image.'))
     attachment = models.FileField(upload_to='event/attachments', blank=True, help_text=_('Upload an optional file.'))
 
+    def is_visible_to(self, user):
+        """
+        Determine if the event is visible to the given user.
+        """
+        if self.visibility == 'public':
+            return True
+        elif self.visibility == 'private':
+            return self.teacher.user == user  # Assuming you have a user field in your model
+        return False
+
+    def get_visible_content(self, user):
+        """
+        Return the content of the event if visible; otherwise, return a message.
+        """
+        if self.is_visible_to(user):
+            return self.event_post
+        else:
+            return "This event is private and cannot be viewed."
+
+    class Meta:
+        verbose_name = _('Event')
+        verbose_name_plural = _('Events')
+        ordering = ['-created_at']  # Order by creation date, newest first
+
     def __str__(self):
         return f"Event by {self.teacher} - {self.event_post[:20]}... on {self.created_at.strftime('%Y-%m-%d')}"
+
+    # Optionally, you can add a method to get a short event post
+    def short_event_post(self):
+        return self.event_post[:50] + '...' if len(self.event_post) > 50 else self.event_post
+        

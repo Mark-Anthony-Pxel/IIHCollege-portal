@@ -69,6 +69,8 @@ urlpatterns = [
 
     # Community Management
     path('community/delete/<int:community_id>/', views.delete_community, name='delete_community'),
+    path('event/delete/<int:event_id>/', views.delete_event, name='delete_event'),
+
 
     # Async Data
     path('async-data/', views.MyAsyncView.as_view(), name='async_data'),

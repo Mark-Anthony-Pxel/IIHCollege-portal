@@ -95,8 +95,8 @@ class CommunityAdmin(admin.ModelAdmin):
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('teacher', 'event_post', 'visibility', 'created_at', 'updated_at')
-    search_fields = ('teacher__user__username', 'event_post')
+    list_display = ('teacher', 'title', 'event_post', 'visibility', 'created_at', 'updated_at')
+    search_fields = ('teacher__user__username', 'title', 'event_post')
     list_filter = ('visibility', 'created_at')
     ordering = ('-created_at',)  # Order by creation date descending
     readonly_fields = ('created_at', 'updated_at')  # Make created_at and updated_at read-only
