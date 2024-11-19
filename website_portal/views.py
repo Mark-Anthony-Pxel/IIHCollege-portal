@@ -7,6 +7,8 @@ from django.views import View
 from .forms import EnrollForm, MessageForm, TeacherForm, CommunityForm, EventForm
 from .models import Student, Message, Teacher, Community, Event
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
+from django.conf import settings
 
 class MyAsyncView(View):
     async def get(self, request, *args, **kwargs):
@@ -184,7 +186,7 @@ def enroll(request):
                     fail_silently=False,
                 )
 
-                
+
                 messages.success(request, 'Student enrolled successfully!')
                 return redirect('success')
             except Exception as e:
