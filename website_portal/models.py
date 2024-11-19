@@ -96,7 +96,7 @@ class Student(models.Model):
 
 class Message(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    message = models.TextField()
+    message = models.TextField(blank=True)
     approved = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -113,7 +113,7 @@ class Message(models.Model):
         validators=[validate_file_size],
         help_text=_('Upload an optional file (max 10MB).')
     )
-    is_read = models.BooleanField(default=False, verbose_name=_('Is Read'))
+    is_read = models.BooleanField(default=False, blank=True, verbose_name=_('Is Read'))
 
     class Meta:
         verbose_name = _('Message')

@@ -3,6 +3,87 @@
       max-width: 80%;
       margin: 10px;
     }
-  </style>
-</head>
-<body>
+    
+</style>
+  <div class="container mt-5">
+
+    {% if user.teacher %}
+      <form class="bg-light p-4 mb-4" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <h2 class="text-center mb-4">Create Event</h2>
+
+          <div class="form-group">
+              <label for="{{ form.title.id_for_label }}">Title:</label>
+              <input type="text" class="form-control" id="{{ form.title.id_for_label }}" name="{{ form.title.name }}" value="{{ form.title.value|default_if_none:'' }}" placeholder="{{ form.title.label }}" required>
+              <small class="form-text text-muted">{{ form.title.help_text }}</small>
+              {{ form.title.errors }}
+          </div>
+
+          <div class="form-group">
+              <label for="{{ form.event_post.id_for_label }}">Event Description:</label>
+              <textarea class="form-control" id="{{ form.event_post.id_for_label }}" name="{{ form.event_post.name }}" rows="4" placeholder="{{ form.event_post.label }}" required>{{ form.event_post.value|default_if_none:'' }}</textarea>
+              <small class="form-text text-muted">{{ form.event_post.help_text }}</small>
+              {{ form.event_post.errors }}
+          </div>
+
+          <div class="form-group">
+              <label for="{{ form.visibility.id_for_label }}">Select Visibility:</label>
+              <select class="form-control" id="{{ form.visibility.id_for_label }}" name="{{ form.visibility.name }}" required>
+                  {% for option in form.visibility.field.choices %}
+                      <option value="{{ option.0 }}" {% if option.0 == form.visibility.value %}selected{% endif %}>{{ option.1 }}</option>
+                  {% endfor %}
+              </select>
+              <small class="form-text text-muted">{{ form.visibility.help_text }}</small>
+              {{ form.visibility.errors }}
+          </div>
+
+          <div class="form-group">
+              <label for="{{ form.image.id_for_label }}">Event Image:</label>
+              <input type="file" class="btn btn-outline-secondary form-control-file" id="{{ form.image.id_for_label }}" name="{{ form.image.name }}" accept="image/*" multiple onchange="previewImages(event)">
+              <small class="form-text text-muted">{{ form.image.help_text }}</small>
+              {{ form.image.errors }}
+              <div class="preview" id="image-preview"></div>
+          </div>
+
+          <div class="form-group">
+              <label for="{{ form.attachment.id_for_label }}">Attachment:</label>
+              <input type="file" class="btn btn-outline-secondary form-control-file" id="{{ form.attachment.id_for_label }}" name="{{ form.attachment.name }}" onchange="previewAttachment(event)">
+              <small class="form-text text-muted">{{ form.attachment.help_text }}</small>
+              {{ form.attachment.errors }}
+              <div class="preview" id="attachment-preview"></div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg btn-block">Create Event</button>
+      </form>
+          {% endif %}
+      <script>
+          function previewImages(event) {
+              const previewContainer = document.getElementById('image-preview');
+              previewContainer.innerHTML = ''; // Clear previous previews
+              const files = event.target.files;
+
+              for (let i = 0; i < files.length; i++) {
+                  const file = files[i];
+                  const reader = new FileReader();
+                  reader.onload = function(e) {
+                      const img = document.createElement('img');
+                      img.src = e.target.result;
+                      img.style.maxWidth = '80%';
+                      img.style.margin = '10px';
+                      previewContainer.appendChild(img);
+                  };
+                  reader.readAsDataURL(file);
+              }
+          }
+
+          function previewAttachment(event) {
+              const previewContainer = document.getElementById('attachment-preview');
+              previewContainer.innerHTML = ''; // Clear previous previews
+              const file = event.target.files[0];
+              if (file) {
+                  const fileInfo = document.createElement('p');
+                  fileInfo.textContent = `Uploaded attachment: ${file.name}`; // Display the file name
+                  previewContainer.appendChild(fileInfo); // Append the file info to the preview container
+              }
+          }
+      </script>

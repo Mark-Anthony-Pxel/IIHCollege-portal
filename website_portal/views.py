@@ -173,6 +173,18 @@ def enroll(request):
 
             try:
                 student.save()
+
+                # Send confirmation email
+                send_mail(
+                    'Enrollment Confirmation',
+                    f'Thank you for enrolling, {user.first_name}!\n\n'
+                    'We are excited to have you on board. If you have any questions, feel free to reach out.',
+                    settings.DEFAULT_FROM_EMAIL,  # This should be configured in your settings.py
+                    [user.email],  # Recipient email
+                    fail_silently=False,
+                )
+
+                
                 messages.success(request, 'Student enrolled successfully!')
                 return redirect('success')
             except Exception as e:

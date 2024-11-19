@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us - IIHCollege</title>
+    <title>Contact - IIHCollege</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
@@ -81,69 +81,79 @@
     {% include 'support-files/header.html' %} <!-- Include the custom header here -->
 
     <div class="hero shadow mb-5">
-    {% if user.student %}
-        <h1 class="animate-on-scroll">Get in Touch with Us</h1>
-        <p class="animate-on-scroll">Have a question or concern? We're here to help!</p>
-    {% elif user.teacher %}
-        <h1 class="animate-on-scroll">Students Feedback</h1>
-        <p class="animate-on-scroll">Question or concern of IIHCollege students</p>
-    {% endif %}
+        {% if user.student %}
+            <h1 class="animate-on-scroll">Get in Touch with Us</h1>
+            <p class="animate-on-scroll">Have a question or concern? We're here to help!</p>
+        {% elif user.teacher %}
+            <h1 class="animate-on-scroll">Students Feedback</h1>
+            <p class="animate-on-scroll">Question or concern of IIHCollege students</p>
+        {% endif %}
     </div>
 
-    <div class="container">    
-    { if user.student %}
-    <h2>Contact Form</h2>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="message">Message</label>
-            <textarea rows="8" id="message" name="message" class="form-control" required placeholder="Enter your message here..."></textarea>
-        </div>
-        <div class="form-group">
-            <label for="id_image">{{ form.image.label }}</label>
-            <input type="file" name="image" id="id_image" class="form-control-file" onchange="previewImage(event)">
-            <div class="preview" id="image-preview"></div>
-            <small class="form-text text-muted">{{ form.image.help_text }}</small>
-        </div>
-    
-        <div class="form-group">
-            <label for="id_attachment">{{ form.attachment.label }}</label>
-            <input type="file" name="attachment" id="id_attachment" class="form-control-file" onchange="previewAttachment(event)">
-            <div class="preview" id="attachment-preview"></div>
-            <small class="form-text text-muted">{{ form.attachment.help_text }}</small>
-        </div>
-    
+    <div class="container mt-5">
+        {% if user.student %}
+            <h2>Contact Form</h2>
+            <form class="card container p-5" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
 
-        <button type="submit" class="btn btn-primary">Send Message</button>
-    </form>
-    { elif user.teacher %}
-        <h2 class="mt-5">Submitted Messages</h2>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea rows="8" id="message" name="message" class="form-control" required placeholder="Enter your message here..."></textarea>
+                    <small class="form-text text-muted">{{ form.message.help_text }}</small>
+                    {{ form.message.errors }}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_image">{{ form.image.label }}</label>
+                    <input type="file" name="image" id="id_image" class="form-control-file" onchange="previewImage(event)">
+                    <div class="preview" id="image-preview"></div>
+                    <small class="form-text text-muted">{{ form.image.help_text }}</small>
+                </div>
         
-        <div class="card p-3">
-            {% for message in messages %}
-                <strong>{{ message.student.last_name|upper }}, {{ message.student.first_name|upper }}</strong>
-                <a target="_blank" class="alert alert-info" href="mailto:{{ message.student.email }}?subject=IIH%20College%20Contact&cc=iihcollege.teacher@test.com&bcc=iihcollege.admin@test.com&body=Thank%20you%20for%20reaching%20out%20to%20IIH%20College!%20We%20appreciate%20your%20interest%20and%20want%20to%20assure%20you%20that%20your%20request%20for%20contact%20information%20is%20important%20to%20us.%20Our%20team%20is%20currently%20processing%20your%20inquiry%2C%20and%20we%20kindly%20ask%20for%20your%20patience%20as%20we%20work%20to%20provide%20you%20with%20the%20necessary%20details.%20Please%20allow%20us%20a%20moment%20to%20gather%20the%20relevant%20information%2C%20and%20we%20will%20get%20back%20to%20you%20as%20soon%20as%20possible.%20Your%20understanding%20is%20greatly%20appreciated%2C%20and%20we%20look%20forward%20to%20assisting%20you%20shortly!%0A%0A">{{ message.student.email }}</a>
-                <br>
-                <p class="m-2">{{ message.message }}</p><br>
-                {% if not message.approved %}
-                <form method="post" action="{% url 'approve_message' message_id=message.id %}" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit">Approve</button>
-                </form>
-                {% else %}
-                <span class="text-success">Approved</span>
-                {% endif %}
-                <form method="post" action="{% url 'delete_message' message.id %}" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit" onclick="return confirm('Are you sure you want to delete this message?');">Delete</button>
-                </form>
-            {% empty %}
-            <div class="post">No messages submitted yet.</li>
-            {% endfor %}
+                <div class="form-group">
+                    <label for="id_attachment">{{ form.attachment.label }}</label>
+                    <input type ="file" name="attachment" id="id_attachment" class="form-control-file" onchange="previewAttachment(event)">
+                    <div class="preview" id="attachment-preview"></div>
+                    <small class="form-text text-muted">{{ form.attachment.help_text }}</small>
+                </div>
+        
+                <button type="submit" class="btn btn-primary btn-lg btn-block ">Send Message</button>
+            </form>
+        {% elif user.teacher %}
+            <h2 class="mt-5">Submitted Messages</h2>
+            <div class="card p-3">
+                {% for message in messages %}
+                    <strong>{{ message.student.last_name|upper }}, {{ message.student.first_name|upper }}</strong>
+                    <a target="_blank" class="alert alert-info" href="mailto:{{ message.student.email }}?subject=IIH%20College%20Contact&cc=iihcollege.teacher@test.com&bcc=iihcollege.admin@test.com&body=Thank%20you%20for%20reaching%20out%20to%20IIH%20College!%20We%20appreciate%20your%20interest%20and%20want%20to%20assure%20you%20that%20your%20request%20for%20contact%20information%20is%20important%20to%20us.%20Our%20team%20is%20currently%20processing%20your%20inquiry%2C%20and%20we%20kindly%20ask%20for%20your%20patience%20as%20we%20work%20to%20provide%20you%20with%20the%20necessary%20details.%20Please%20allow%20us%20a%20moment%20to%20gather%20the%20relevant%20information%2C%20and%20we%20will%20get%20back%20to%20you%20as%20soon%20as%20possible.%20Your%20understanding%20is%20greatly%20appreciated%2C%20and%20we%20look%20forward%20to%20assisting%20you%20shortly!%0A%0A">{{ message.student.email }}</a>
+                    <br>
+                    <p class="m-2">{{ message.message }}</p><br>
+                    <p>
+                        <button class="btn btn-secondary mt-4" type="button" data-toggle="collapse" data-target="#collapseExample-{{ community.id }}" aria-expanded="false" aria-controls="collapseExample">
+                            settings
+                        </button>
+                    </p>
+                    {% if user.teacher %}
+                        <div class="collapse" id="collapseExample-{{ community.id }}">
+                            {% if not message.approved %}
+                            <form method="post" action="{% url 'approve_message' message_id=message.id %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit">Approve</button>
+                            </form>
+                        {% else %}
+                            <span class="text-success">Approved</span>
+                        {% endif %}
+                        <form method="post" action="{% url 'delete_message' message.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button class="m-2" type="submit" onclick="return confirm('Are you sure you want to delete this message?');">Delete</button>
+                        </form>
+                        </div>
+                    {% endif %}
+                {% empty %}
+                <div class="post">No messages submitted yet.</div>
+                {% endfor %}
             </div>
-        { endif %}
+        {% endif %}
     </div>
- </div>   
     {% include 'support-files/loader.html' %}
     {% include 'support-files/footer.html' %}
     {% include 'support-files/logout-function.html' %}
@@ -163,46 +173,42 @@
             });
         }
 
-        // Initial check in case elements are already in view
         handleScroll();
-
-        // Add event listener for scroll event
         window.addEventListener('scroll', handleScroll);
     }
 
-    // Initialize the scroll animation for elements with the class 'animate-on-scroll'
     document.addEventListener('DOMContentLoaded', function() {
         initScrollAnimation('.animate-on-scroll');
     });
 
     function previewImage(event) {
-    const previewContainer = document.getElementById('image-preview');
-    previewContainer.innerHTML = ''; // Clear previous previews
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const img = document.createElement('img');
-            img.src = e.target.result; // Set the image source to the file's data
-            img.style.maxWidth = '100%'; // Set max width for the image
-            img.style.maxHeight = '300px'; // Set max height for the image
-            img.alt = 'Image preview'; // Add alt text for accessibility
-            previewContainer.appendChild(img); // Append the image to the preview container
-        };
-        reader.readAsDataURL(file); // Read the file as a data URL
+        const previewContainer = document.getElementById('image-preview');
+        previewContainer.innerHTML = '';
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.maxWidth = '100%';
+                img.style.maxHeight = '300px';
+                img.alt = 'Image preview';
+                previewContainer.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        }
     }
-}
 
-function previewAttachment(event) {
-    const previewContainer = document.getElementById('attachment-preview');
-    previewContainer.innerHTML = ''; // Clear previous previews
-    const file = event.target.files[0];
-    if (file) {
-        const fileInfo = document.createElement('p');
-        fileInfo.textContent = `Uploaded attachment: ${file.name}`; // Display the file name
-        previewContainer.appendChild(fileInfo); // Append the file info to the preview container
+    function previewAttachment(event) {
+        const previewContainer = document.getElementById('attachment-preview');
+        previewContainer.innerHTML = '';
+        const file = event.target.files[0];
+        if (file) {
+            const fileInfo = document.createElement('p');
+            fileInfo.textContent = `Uploaded attachment: ${file.name}`;
+            previewContainer.appendChild(fileInfo);
+        }
     }
-}
     </script>
 </body>
 </html>

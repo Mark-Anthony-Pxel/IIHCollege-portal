@@ -30,7 +30,7 @@
       {% if event.attachment %}
           <a class="card btn-light m-4 p-4" href="{{ event.attachment.url }}">Download Attachment</a>
       {% endif %}
-    <p class="mt-5">{{ event.post }}</p>
+    <p class="mt-5">{{ event.event_post }}</p>
     <form method="post">
         {% csrf_token %}
         <button class="btn btn-danger btn-lg" type="submit">Delete</button>
