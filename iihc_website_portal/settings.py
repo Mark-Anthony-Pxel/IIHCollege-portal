@@ -16,13 +16,13 @@ ALLOWED_HOSTS = [
 ]
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')  
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')  
-DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_HOST_USER') 
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')  
+# EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')  
+# DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_HOST_USER') 
 
 # Configure message tags
 MESSAGE_TAGS = {
@@ -84,13 +84,19 @@ ASGI_APPLICATION = 'iihc_website_portal.asgi.application'
 
 WSGI_APPLICATION = 'iihc_website_portal.wsgi.application'
 
-
 DATABASES = {
-    'default': dj_database_url.config(
-        default='postgresql://pixel:VfJKqUY65kF9UkFrCXpTFi9sGevAmPdL@dpg-csteerl6l47c73ek31p0-a.singapore-postgres.render.com/portal_uxnh',
-        conn_max_age=600
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
+
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default='postgresql://pixel:VfJKqUY65kF9UkFrCXpTFi9sGevAmPdL@dpg-csteerl6l47c73ek31p0-a.singapore-postgres.render.com/portal_uxnh',
+#         conn_max_age=600
+#     )
+# }
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
