@@ -7,8 +7,8 @@ from django.views import View
 from .forms import EnrollForm, MessageForm, TeacherForm, CommunityForm, EventForm
 from .models import Student, Message, Teacher, Community, Event
 from django.contrib.auth.models import User
-from django.core.mail import send_mail
-from django.conf import settings
+# from django.core.mail import send_mail
+# from django.conf import settings
 
 class MyAsyncView(View):
     async def get(self, request, *args, **kwargs):
@@ -175,18 +175,15 @@ def enroll(request):
 
             try:
                 student.save()
-
-                # Send confirmation email
-                send_mail(
-                    'Enrollment Confirmation',
-                    f'Thank you for enrolling, {user.first_name}!\n\n'
-                    'We are excited to have you on board. If you have any questions, feel free to reach out.',
-                    settings.DEFAULT_FROM_EMAIL,  # This should be configured in your settings.py
-                    [user.email],  # Recipient email
-                    fail_silently=False,
-                )
-
-
+                # # Send confirmation email
+                # send_mail(
+                #     'Enrollment Confirmation',
+                #     f'Thank you for enrolling, {user.first_name}!\n\n'
+                #     'We are excited to have you on board. If you have any questions, feel free to reach out.',
+                #     settings.DEFAULT_FROM_EMAIL,  # This should be configured in your settings.py
+                #     [user.email],  # Recipient email
+                #     fail_silently=False,
+                # )
                 messages.success(request, 'Student enrolled successfully!')
                 return redirect('success')
             except Exception as e:
