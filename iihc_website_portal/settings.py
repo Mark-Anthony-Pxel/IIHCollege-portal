@@ -84,19 +84,19 @@ ASGI_APPLICATION = 'iihc_website_portal.asgi.application'
 
 WSGI_APPLICATION = 'iihc_website_portal.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
 # DATABASES = {
-#     'default': dj_database_url.config(
-#         default='postgresql://pixel:VfJKqUY65kF9UkFrCXpTFi9sGevAmPdL@dpg-csteerl6l47c73ek31p0-a.singapore-postgres.render.com/portal_uxnh',
-#         conn_max_age=600
-#     )
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
 # }
+
+DATABASES = {
+    'default': dj_database_url.config(
+        default='postgresql://pixel:VfJKqUY65kF9UkFrCXpTFi9sGevAmPdL@dpg-csteerl6l47c73ek31p0-a.singapore-postgres.render.com/portal_uxnh',
+        conn_max_age=600
+    )
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
